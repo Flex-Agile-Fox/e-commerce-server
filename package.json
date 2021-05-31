@@ -1,0 +1,37 @@
+{
+  "name": "e-commerce-server",
+  "version": "1.0.0",
+  "description": "e-commerce-server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "db:teardown": "sequelize-cli db:drop",
+    "db:setup": "sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
+    "db:magic": "npm run db:teardown && npm run db:setup && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericksonManurung/e-commerce-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericksonManurung/e-commerce-server/issues"
+  },
+  "homepage": "https://github.com/ericksonManurung/e-commerce-server#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
+  }
+}
