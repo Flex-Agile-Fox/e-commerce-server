@@ -1,0 +1,26 @@
+{
+  "name": "e-commerce-server",
+  "version": "1.0.0",
+  "description": "e-commerce-server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adsap/e-commerce-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adsap/e-commerce-server/issues"
+  },
+  "homepage": "https://github.com/adsap/e-commerce-server#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.2"
+  }
+}
