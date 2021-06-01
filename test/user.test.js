@@ -60,23 +60,89 @@ describe('POST /users/register', () => {
 			request(app)
 				.post('/users/register')
 				.set('Content-Type', 'application/json')
-				.send({ email: 'dummy@gmail.com', password: 'password123' })
+				.send({
+					name: 'Dummy',
+					email: 'dummy@gmail.com',
+					password: 'password123',
+					role: 'customer',
+				})
 				.then(({ status, body }) => {
 					expect(status).toBe(409);
 					expect(body).toHaveProperty('message', 'email has been used');
 					done();
 				});
 		});
-		// it('fail register invalid email/password, return status code 400', (done) => {
-		// 	request(app)
-		// 		.post('/users/register')
-		// 		.set('Content-Type', 'application/json')
-		// 		.send({ email: 'dummy.com', password: '123' })
-		// 		.then((response) => {
-		// 			expect(response.status).toBe('400');
-		// 			done();
-		// 		});
-		// });
+
+		it('error register due to name is empty; return status code 400, and error message', (done) => {
+			request(app)
+				.post('/users/register')
+				.set('Content-Type', 'application/json')
+				.send({
+					name: '',
+					email: 'dummy1@gmail.com',
+					password: 'password123',
+					role: 'customer',
+				})
+				.then(({ status, body }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty('message', 'please input your name');
+					done();
+				});
+		});
+
+		it('error register due to email is empty; return status code 400, and error message', (done) => {
+			request(app)
+				.post('/users/register')
+				.set('Content-Type', 'application/json')
+				.send({
+					name: 'Dummy1',
+					email: '',
+					password: 'password123',
+					role: 'customer',
+				})
+				.then(({ status, body }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty(
+						'message',
+						'please input your mail address'
+					);
+					done();
+				});
+		});
+
+		it('error register due to password is empty; return status code 400, and error message', (done) => {
+			request(app)
+				.post('/users/register')
+				.set('Content-Type', 'application/json')
+				.send({
+					name: 'Dummy1',
+					email: 'dummy1@gmail.com',
+					password: '',
+					role: 'customer',
+				})
+				.then(({ status, body }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty('message', 'please input your password');
+					done();
+				});
+		});
+
+		it('error register due to role is empty; return status code 400, and error message', (done) => {
+			request(app)
+				.post('/users/register')
+				.set('Content-Type', 'application/json')
+				.send({
+					name: 'Dummy1',
+					email: 'dummy@gmail.com',
+					password: 'password123',
+					role: '',
+				})
+				.then(({ status, body }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty('message', 'role must not be empty');
+					done();
+				});
+		});
 	});
 });
 
