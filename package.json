@@ -4,7 +4,7 @@
 	"description": "e-commerce-server",
 	"main": "app.js",
 	"scripts": {
-		"test": "NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
+		"test": "jest --runInBand --detectOpenHandles --forceExit",
 		"dev": "nodemon app.js",
 		"setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
 		"setup:test": "sequelize-cli db:drop --env test && sequelize-cli db:create --env test && sequelize-cli db:migrate --env test"
