@@ -4,7 +4,10 @@
   "description": "e-commerce-server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
+    "setup:test": "sequelize-cli db:drop --env test && sequelize-cli db:create --env test && sequelize-cli db:migrate --env test",
+    "dev": "nodemon app.js",
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",
@@ -19,8 +22,15 @@
   "homepage": "https://github.com/adsap/e-commerce-server#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.6.0",
     "sequelize": "^6.6.2"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "jest": "^27.0.3",
+    "supertest": "^6.1.3"
   }
 }
