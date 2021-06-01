@@ -35,43 +35,63 @@ const { queryInterface } = sequelize;
 // });
 
 describe('POST /users/register', () => {
-	it('success register with fresh and valid email/password, return status code 201', (done) => {
-		request(app)
-			.post('/users/register')
-			.set('Content-Type', 'application/json')
-			.send({
-				email: 'dummy@gmail.com',
-				password: 'password123',
-				role: 'customer',
-			})
-			.then((response) => {
-				expect(response.status).toBe(201);
-				done();
-			});
+	describe('Success register', () => {
+		it('success register with fresh and valid email/password; return status code 201, and access_token and user property', (done) => {
+			request(app)
+				.post('/users/register')
+				.set('Content-Type', 'application/json')
+				.send({
+					name: 'Dummy',
+					email: 'dummy@gmail.com',
+					password: 'password123',
+					role: 'customer',
+				})
+				.then(({ status, body }) => {
+					expect(status).toBe(201);
+					expect(body).toHaveProperty('access_token', expect.any(String));
+					expect(body).toHaveProperty('user');
+					done();
+				});
+		});
 	});
 
-	// it('fail register with fresh but invalid email/password, return status code 400', (done) => {
-	// 	request(app)
-	// 		.post('/users/register')
-	// 		.set('Content-Type', 'application/json')
-	// 		.send({ email: 'dummy.com', password: '123' })
-	// 		.then((response) => {
-	// 			expect(response.status).toBe('400');
-	// 			done();
-	// 		});
-	// });
+	describe('Error register', () => {
+		it('error register due to email must be unique; return status code 409, and error message', (done) => {
+			request(app)
+				.post('/users/register')
+				.set('Content-Type', 'application/json')
+				.send({ email: 'dummy@gmail.com', password: 'password123' })
+				.then(({ status, body }) => {
+					expect(status).toBe(409);
+					expect(body).toHaveProperty('message', 'email has been used');
+					done();
+				});
+		});
+		// it('fail register invalid email/password, return status code 400', (done) => {
+		// 	request(app)
+		// 		.post('/users/register')
+		// 		.set('Content-Type', 'application/json')
+		// 		.send({ email: 'dummy.com', password: '123' })
+		// 		.then((response) => {
+		// 			expect(response.status).toBe('400');
+		// 			done();
+		// 		});
+		// });
+	});
 });
 
 describe('POST /users/login', () => {
-	it('success login with registered account, return status code 200', (done) => {
-		request(app)
-			.post('/users/login')
-			.set('Content-Type', 'application/json')
-			.send({ email: 'dummy1@gmail.com', password: 'password123' })
-			.then((response) => {
-				expect(response.status).toBe(200);
-				done();
-			});
+	describe('Success login', () => {
+		it('success login with registered account, return status code 200', (done) => {
+			request(app)
+				.post('/users/login')
+				.set('Content-Type', 'application/json')
+				.send({ email: 'dummy1@gmail.com', password: 'password123' })
+				.then((response) => {
+					expect(response.status).toBe(200);
+					done();
+				});
+		});
 	});
 
 	// it('fail login with invalid email/password, return status code 401', (done) => {
