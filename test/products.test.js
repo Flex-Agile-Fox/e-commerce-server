@@ -172,6 +172,94 @@ describe("POST /products", () => {
 				});
 		});
 	});
+
+	it("Fail add product, negative stock {sucess: false, errors: ['Stock must be at least 1']}", (done) => {
+		User.findOne({
+			where: { email: default_user.email },
+		}).then((admin) => {
+			const access_token = jwt.sign(
+				{ id: admin.id, email: admin.email, role: admin.role },
+				process.env.JWT_SECRET
+			);
+			request(app)
+				.post("/products")
+				.set("Content-Type", "application/json")
+				.set("access_token", access_token)
+				.send({
+					name: "test",
+					image_url: "image_test.url",
+					price: 1000,
+					stock: -1,
+					category: "Hobby",
+					description: "Limited Edition",
+				})
+				.then(({ body, status }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty("success", false);
+					expect(body["errors"]).toContain("Stock must be at least 1");
+					done();
+				});
+		});
+	});
+
+	it("Fail add product, negative price {sucess: false, errors: ['Price must be at least 1']}", (done) => {
+		User.findOne({
+			where: { email: default_user.email },
+		}).then((admin) => {
+			const access_token = jwt.sign(
+				{ id: admin.id, email: admin.email, role: admin.role },
+				process.env.JWT_SECRET
+			);
+			request(app)
+				.post("/products")
+				.set("Content-Type", "application/json")
+				.set("access_token", access_token)
+				.send({
+					name: "test",
+					image_url: "image_test.url",
+					price: -1,
+					stock: -1,
+					category: "Hobby",
+					description: "Limited Edition",
+				})
+				.then(({ body, status }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty("success", false);
+					expect(body["errors"]).toContain("Price must be at least 1");
+					done();
+				});
+		});
+	});
+
+	it("Fail add product, price with string as a value {sucess: false, errors: ['Price must be a number', 'Stock must be a number']}", (done) => {
+		User.findOne({
+			where: { email: default_user.email },
+		}).then((admin) => {
+			const access_token = jwt.sign(
+				{ id: admin.id, email: admin.email, role: admin.role },
+				process.env.JWT_SECRET
+			);
+			request(app)
+				.post("/products")
+				.set("Content-Type", "application/json")
+				.set("access_token", access_token)
+				.send({
+					name: "test",
+					image_url: "image_test.url",
+					price: "price",
+					stock: "stock",
+					category: "Hobby",
+					description: "Limited Edition",
+				})
+				.then(({ body, status }) => {
+					expect(status).toBe(400);
+					expect(body).toHaveProperty("success", false);
+					expect(body["errors"]).toContain("Price must be a number");
+					expect(body["errors"]).toContain("Stock must be a number");
+					done();
+				});
+		});
+	});
 });
 
 // describe("GET /products/:id", () => {

@@ -57,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
 						args: 1,
 						msg: "Price must be at least 1",
 					},
+					isNumeric: {
+						args: true,
+						msg: "Price must be a number",
+					},
 				},
 			},
 			stock: {
@@ -74,6 +78,10 @@ module.exports = (sequelize, DataTypes) => {
 					min: {
 						args: 1,
 						msg: "Stock must be at least 1",
+					},
+					isNumeric: {
+						args: true,
+						msg: "Stock must be a number",
 					},
 				},
 			},
