@@ -1,3 +1,4 @@
+const { Product } = require("../models");
 class ProductController {
 	static read(req, res, next) {
 		res.status(200).json({});
@@ -8,7 +9,12 @@ class ProductController {
 	}
 
 	static add(req, res, next) {
-		res.status(201).json({});
+		const { name, image_url, price, stock, category, description } = req.body;
+		Product.create({ name, image_url, price, stock, category, description })
+			.then((product) => {
+				res.status(201).json({ success: true, data: product });
+			})
+			.catch((err) => next(err));
 	}
 
 	static edit(req, res, next) {

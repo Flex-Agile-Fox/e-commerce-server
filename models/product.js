@@ -97,11 +97,11 @@ module.exports = (sequelize, DataTypes) => {
 				validate: {
 					notNull: {
 						args: true,
-						msg: "Category cannot be null",
+						msg: "Description cannot be null",
 					},
 					notEmpty: {
 						args: true,
-						msg: "Category cannot be empty",
+						msg: "Description cannot be empty",
 					},
 				},
 			},

@@ -4,24 +4,30 @@ const bcrypt = require("bcrypt");
 const { sequelize } = require("../models");
 const { queryInterface } = sequelize;
 
+// default user setup
+const salt = bcrypt.genSaltSync(10);
+const default_password = "123456";
+const hash = bcrypt.hashSync(default_password, salt);
+const default_user = {
+	name: "test",
+	email: "email@test.com",
+	password: hash,
+	role: "user",
+	createdAt: new Date(),
+	updatedAt: new Date(),
+};
+
+// jest test case
 beforeAll((done) => {
 	queryInterface
 		.bulkDelete("Users", null, {})
 		.then(() => {
-			const salt = bcrypt.genSaltSync(10);
-			const hash = bcrypt.hashSync("123456", salt);
-			const user = {
-				name: "test",
-				email: "email@test.com",
-				password: hash,
-				role: "user",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			};
-			const users = [user];
+			const users = [default_user];
 			return queryInterface.bulkInsert("Users", users);
 		})
-		.then(() => done())
+		.then((user) => {
+			done();
+		})
 		.catch((err) => {
 			throw err;
 		});
@@ -54,7 +60,11 @@ describe("POST /users/register", () => {
 		request(app)
 			.post("/users/register")
 			.set("Content-Type", "application/json")
-			.send({ name: "duplicate", email: "email@test.com", password: "123456" })
+			.send({
+				name: "duplicate",
+				email: default_user.email,
+				password: "123456",
+			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
 				expect(body).toHaveProperty("success", false);
@@ -105,11 +115,50 @@ describe("LOGIN /users/login", () => {
 		request(app)
 			.post("/users/login")
 			.set("Content-Type", "application/json")
-			.send({})
+			.send({ email: default_user.email, password: default_password })
 			.then(({ body, status }) => {
-				expect(status).toBe(201);
-				// expect(body).toHaveProperty("success", "true");
-				// expect(body).toHaveProperty("access_token", expect.any(String));
+				expect(status).toBe(200);
+				expect(body).toHaveProperty("success", true);
+				expect(body).toHaveProperty("access_token", expect.any(String));
+				done();
+			});
+	});
+
+	it("Fail login using invalid email , return {sucess: false, errors: 'Invalid email and password'}", (done) => {
+		request(app)
+			.post("/users/login")
+			.set("Content-Type", "application/json")
+			.send({ email: "email@invalid.com", password: default_password })
+			.then(({ body, status }) => {
+				expect(status).toBe(400);
+				expect(body).toHaveProperty("success", false);
+				expect(body["errors"]).toContain("Invalid email and password");
+				done();
+			});
+	});
+
+	it("Fail login using invalid password , return {sucess: false, errors: 'Invalid email and password'}", (done) => {
+		request(app)
+			.post("/users/login")
+			.set("Content-Type", "application/json")
+			.send({ email: default_user.email, password: "123" })
+			.then(({ body, status }) => {
+				expect(status).toBe(400);
+				expect(body).toHaveProperty("success", false);
+				expect(body["errors"]).toContain("Invalid email and password");
+				done();
+			});
+	});
+
+	it("Fail login using empty password and empty email , return {sucess: false, errors: 'Invalid email and password'}", (done) => {
+		request(app)
+			.post("/users/login")
+			.set("Content-Type", "application/json")
+			.send({ email: default_user.email, password: "123" })
+			.then(({ body, status }) => {
+				expect(status).toBe(400);
+				expect(body).toHaveProperty("success", false);
+				expect(body["errors"]).toContain("Invalid email and password");
 				done();
 			});
 	});

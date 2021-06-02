@@ -13,6 +13,26 @@ const errorHandler = (err, req, res, next) => {
 			code = 400;
 			errors.push("User Exists");
 			break;
+		case "InvalidEmailAndPassword":
+			code = 400;
+			errors.push(err.message);
+			break;
+		case "MissingToken":
+			code = 400;
+			errors.push(err.message);
+			break;
+		case "InvalidToken":
+			code = 400;
+			errors.push(err.message);
+			break;
+		case "LoginFail":
+			code = 400;
+			errors.push(err.message);
+			break;
+		case "Unauthorized":
+			code = 401;
+			errors.push(err.message);
+			break;
 		default:
 			code = 500;
 			errors.push("Internal server error");
