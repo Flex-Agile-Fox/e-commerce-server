@@ -12,6 +12,7 @@ beforeAll((done) => {
       const user = {
         email: 'john@example.com',
         password: bcrypt.hashSync('password', salt),
+        role: 'admin',
         createdAt: new Date(),
         updatedAt: new Date(),
       };
