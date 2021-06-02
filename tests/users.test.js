@@ -54,7 +54,7 @@ describe('POST /users/login', () => {
     request(app)
       .post('/users/login')
       .set('Content-Type', 'application/json')
-      .send({ email: 'john', password: 'passwords' })
+      .send({ email: 'john@example.com', password: 'passwords' })
       .then(({ body, status }) => {
         expect(status).toBe(401);
         expect(body).toHaveProperty('errorMessages', expect.any(Array));
@@ -69,11 +69,26 @@ describe('POST /users/login', () => {
     request(app)
       .post('/users/login')
       .set('Content-Type', 'application/json')
-      .send({ email: 'johno', password: 'password' })
+      .send({ email: 'johno@example.com', password: 'password' })
       .then(({ body, status }) => {
         expect(status).toBe(404);
         expect(body).toHaveProperty('errorMessages', expect.any(Array));
         expect(body.errorMessages).toContain('User Not Found');
+        
+        done();
+        
+      });
+  });
+
+  it('Fail login if email and password empty, return error message', (done) => {
+    request(app)
+      .post('/users/login')
+      .set('Content-Type', 'application/json')
+      .send({ email: '', password: '' })
+      .then(({ body, status }) => {
+        expect(status).toBe(404);
+        expect(body).toHaveProperty('errorMessages', expect.any(Array));
+        expect(body.errorMessages).toContain('Email or Password cannot be empty');
         
         done();
         

@@ -15,6 +15,10 @@ const errorHandler = (err, req, res, next) => {
       errorCode = 404;
       errorMessages.push('User Not Found');
       break;
+    case 'EMAIL_PASSWORD_EMPTY':
+      errorCode = 404;
+      errorMessages.push('Email or Password cannot be empty');
+      break;
     case 'PRODUCT_NOT_FOUND':
       errorCode = 404;
       errorMessages.push('Product not found');
