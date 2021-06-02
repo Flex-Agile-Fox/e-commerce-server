@@ -38,17 +38,46 @@ afterAll((done) => {
 describe('POST /users/login', () => {
   it('Success login using correct username and password, return access_token', (done) => {
 
-    const salt = bcrypt.genSaltSync(8);
-
     request(app)
       .post('/users/login')
       .set('Content-Type', 'application/json')
       .send({ email: 'john@example.com', password: 'password' })
       .then(({ body, status }) => {
         expect(status).toBe(200);
-        // expect(body).toHaveProperty('access_token', expect.any(String));
+        expect(body).toHaveProperty('access_token', expect.any(String));
 
         done();
       });
   });
+
+  it('Fail login if email exist in database but wrong password, return error message', (done) => {
+    request(app)
+      .post('/users/login')
+      .set('Content-Type', 'application/json')
+      .send({ email: 'john', password: 'passwords' })
+      .then(({ body, status }) => {
+        expect(status).toBe(401);
+        expect(body).toHaveProperty('errorMessages', expect.any(Array));
+        expect(body.errorMessages).toContain('Wrong email or password');
+        
+        done();
+        
+      });
+  });
+
+  it('Fail login if email not exist in database, return error message', (done) => {
+    request(app)
+      .post('/users/login')
+      .set('Content-Type', 'application/json')
+      .send({ email: 'johno', password: 'password' })
+      .then(({ body, status }) => {
+        expect(status).toBe(404);
+        expect(body).toHaveProperty('errorMessages', expect.any(Array));
+        expect(body.errorMessages).toContain('User Not Found');
+        
+        done();
+        
+      });
+  });
+
 });

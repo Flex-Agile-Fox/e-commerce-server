@@ -11,12 +11,52 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Product)
     }
   };
   User.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    role: DataTypes.STRING
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Email must not be empty'
+        },
+        isEmail: {
+          args: true,
+          msg: 'Invalid email address'
+        }
+      },
+      unique: {
+          args: true,
+          msg: 'Email address already in use'
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Password must not be empty'
+        },
+        len: {
+          args: 6,
+          msg: "Password must be at least 6 characters"
+        }
+      }
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Role must not be empty'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',
