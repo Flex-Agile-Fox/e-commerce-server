@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { User, Product } = require("../models");
 
 const authentication = (req, res, next) => {
 	const { access_token } = req.headers;
@@ -32,7 +32,13 @@ const authorization = (req, res, next) => {
 			message: "Not Authorized",
 		};
 	}
-	next();
+	const { id } = req.params;
+	Product.findByPk(id)
+		.then((data) => {
+			req.product = data;
+			next();
+		})
+		.catch((err) => next(err));
 };
 
 module.exports = { authentication, authorization };

@@ -18,11 +18,35 @@ class ProductController {
 	}
 
 	static edit(req, res, next) {
-		res.status(201).json({});
+		const { id } = req.params;
+		const { name, image_url, price, stock, category, description } = req.body;
+		let product = req.product;
+		product.name = name;
+		product.image_url = image_url;
+		product.price = price;
+		product.stock = stock;
+		product.category = category;
+		product.description = description;
+		product
+			.save()
+			.then((_) => {
+				res
+					.status(201)
+					.json({ success: true, message: "Product Successfully Editted" });
+			})
+			.catch((err) => next(err));
 	}
 
 	static delete(req, res, next) {
-		res.status(201).json({});
+		let product = req.product;
+		product
+			.destroy()
+			.then((_) => {
+				res
+					.status(201)
+					.json({ success: true, message: "Product Successfully Deleted" });
+			})
+			.catch((err) => next(err));
 	}
 }
 
