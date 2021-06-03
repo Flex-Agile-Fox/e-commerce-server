@@ -17,7 +17,7 @@ const errorHandler = (err, req, res, next) => {
       break;
     case 'USER_NOT_AUTHORIZED':
       errorCode = 401;
-      errorMessages.push('Only admin can add product');
+      errorMessages.push('Only admin can add, update and delete product');
       break;
     case 'EMAIL_PASSWORD_EMPTY':
       errorCode = 404;

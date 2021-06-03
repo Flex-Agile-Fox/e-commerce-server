@@ -43,13 +43,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notEmpty: {
+        notNull: {
           args: true,
-          msg: 'Price must not be empty'
+          msg: 'Price must not be null'
         },
         isInt: {
           args: true,
-          msg: 'Invalid integer'
+          msg: 'Price must be integer'
+        },
+        min: {
+          args: [0],
+          msg: 'Price cannot be negative'
         }
       }
     },
@@ -57,13 +61,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notEmpty: {
+        notNull: {
           args: true,
-          msg: 'Stock must not be empty'
+          msg: 'Stock must not be null'
         },
         isInt: {
           args: true,
-          msg: 'Invalid integer'
+          msg: 'Stock must be integer'
+        },
+        min: {
+          args: [0],
+          msg: 'Stock cannot be negative'
         }
       }
     },
@@ -81,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         isInt: {
           args: true,
-          msg: 'Invalid integer'
+          msg: 'User Id must be integer'
         }
       }
     }
