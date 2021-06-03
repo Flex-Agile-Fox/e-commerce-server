@@ -1,22 +1,44 @@
+const {User, Product} = require('../models')
+
 class ProductController{
     static postProduct(req,res,next) {
-        res.status(201).json({success:true, data: 'list produk'})
+        const {name,image_url,price,stock} = req.body
+        Product.create({name,image_url,price,stock})
+        .then((product) => {
+            res.status(201).json({success:true, data: product})
+        }).catch((err) => {
+            next(err)
+        });
     }
 
     static getProduct(req,res,next) {
-        res.status(200).json({success:true, data: 'list produk'})
-    }
-
-    static getDetailProduct(req,res,next) {
-        res.status(200).json({success:true, data: 'list produk'})
+        Product.findAll()
+        .then((product) => {
+            res.status(200).json({success:true, data: product})    
+        }).catch((err) => {
+            next(err)
+        });
     }
 
     static putProduct(req,res,next) {
-        res.status(200).json({success:true, data: 'list produk'})
+        const {id} = req.params
+        const {name,image_url,price,stock} = req.body
+        Product.update({name,image_url,price,stock},{where:{id},returning:true})
+        .then((product) => {
+            res.status(200).json({success:true, data:product[1][0]})
+        }).catch((err) => {
+            next(err)
+        });
     }
 
     static deleteProduct(req,res,next) {
-        res.status(200).json({success:true, data: 'list produk'})
+        const {id} = req.params
+        Product.destroy({where:{id}})
+        .then((product) => {
+            res.status(200).json({success:true, message:"data berhasil dihapus"})
+        }).catch((err) => {
+            next(err)       
+        });
     }
 
 }

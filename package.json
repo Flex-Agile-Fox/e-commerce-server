@@ -9,7 +9,8 @@
     "dev": "nodemon app.js",
     "db:teardown": "sequelize-cli db:drop",
     "db:setup": "sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
-    "db:magic": "npm run db:teardown && npm run db:setup && npm run dev"
+    "db:magic": "npm run db:teardown && npm run db:setup && npm run dev",
+    "db:setup:test": "sequelize-cli db:drop --env test && sequelize-cli db:create --env test && sequelize-cli db:migrate --env test && sequelize-cli db:seed:all --env test"
   },
   "repository": {
     "type": "git",
