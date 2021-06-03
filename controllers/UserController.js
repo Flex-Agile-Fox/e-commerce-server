@@ -4,6 +4,15 @@ const { User } = require('../models');
 
 class UserController {
 
+  static register(req, res, next) {
+    const { email, password, role } = req.body;
+    User.create({ email, password, role })
+      .then(() => {
+        res.status(201).json({ message: 'User registered successfully' });
+      })
+      .catch((err) => next(err));
+  }
+
   static login(req, res, next) {
     const { email, password } = req.body;
     if (!email || !password) throw { name: 'EMAIL_PASSWORD_EMPTY' };
