@@ -4,37 +4,39 @@ const bcrypt = require('bcryptjs');
 const { sequelize } = require('../models');
 const { queryInterface } = sequelize;
 
-// beforeAll((done) => {
-// 	queryInterface
-// 		.bulkDelete('Users', null, {})
-// 		.then(() => {
-// 			const salt = bcrypt.genSaltSync(10);
-// 			const user = {
-// 				email: 'dummy1@gmail.com',
-// 				password: bcrypt.hashSync('password123', salt),
-// 				createdAt: new Date(),
-// 				updatedAt: new Date(),
-// 			};
-// 			const users = [user];
+beforeAll((done) => {
+	queryInterface
+		.bulkDelete('Users', null, {})
+		.then(() => {
+			const salt = bcrypt.genSaltSync(8);
+			const user = {
+				name: 'Dummy1',
+				email: 'dummy1@gmail.com',
+				password: bcrypt.hashSync('password123', salt),
+				role: 'customer',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			};
+			const users = [user];
 
-// 			return queryInterface.bulkInsert('Users', users);
-// 		})
-// 		.then(() => done())
-// 		.catch((err) => {
-// 			throw err;
-// 		});
-// });
+			return queryInterface.bulkInsert('Users', users);
+		})
+		.then(() => done())
+		.catch((err) => {
+			throw err;
+		});
+});
 
-// afterAll((done) => {
-// 	queryInterface
-// 		.bulkDelete('Users', null, {})
-// 		.then(() => done())
-// 		.catch((err) => {
-// 			throw err;
-// 		});
-// });
+afterAll((done) => {
+	queryInterface
+		.bulkDelete('Users', null, {})
+		.then(() => done())
+		.catch((err) => {
+			throw err;
+		});
+});
 
-describe('POST /users/register', () => {
+describe('Register new User: POST /users/register', () => {
 	it('success register with fresh and valid email/password; return status code 201, and access_token and user property', (done) => {
 		request(app)
 			.post('/users/register')
@@ -58,14 +60,15 @@ describe('POST /users/register', () => {
 			.post('/users/register')
 			.set('Content-Type', 'application/json')
 			.send({
-				name: 'Dummy',
-				email: 'dummy@gmail.com',
+				name: 'Dummy1',
+				email: 'dummy1@gmail.com',
 				password: 'password123',
 				role: 'customer',
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(409);
-				expect(body).toHaveProperty('message', 'email has been used');
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('email has been used');
 				done();
 			});
 	});
@@ -76,13 +79,14 @@ describe('POST /users/register', () => {
 			.set('Content-Type', 'application/json')
 			.send({
 				name: '',
-				email: 'dummy1@gmail.com',
+				email: 'dummy2@gmail.com',
 				password: 'password123',
 				role: 'customer',
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty('message', 'please input your name');
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('please input your name');
 				done();
 			});
 	});
@@ -99,10 +103,8 @@ describe('POST /users/register', () => {
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty(
-					'message',
-					'please input your mail address'
-				);
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('please input your mail address');
 				done();
 			});
 	});
@@ -112,14 +114,15 @@ describe('POST /users/register', () => {
 			.post('/users/register')
 			.set('Content-Type', 'application/json')
 			.send({
-				name: 'Dummy1',
-				email: 'dummy1@gmail.com',
+				name: 'Dummy',
+				email: 'dummy3@gmail.com',
 				password: '',
 				role: 'customer',
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty('message', 'please input your password');
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('please input your password');
 				done();
 			});
 	});
@@ -130,13 +133,14 @@ describe('POST /users/register', () => {
 			.set('Content-Type', 'application/json')
 			.send({
 				name: 'Dummy1',
-				email: 'dummy@gmail.com',
+				email: 'dummy4@gmail.com',
 				password: 'password123',
 				role: '',
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty('message', 'role must not be empty');
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('role must not be empty');
 				done();
 			});
 	});
@@ -152,14 +156,20 @@ describe('POST /users/register', () => {
 				role: '',
 			})
 			.then(({ status, body }) => {
+				const errMessage = [
+					'please input your name',
+					'name at least must be 3 characters',
+					'please input your mail address',
+					'please input valid mail address',
+					'please input your password',
+					'password at least must be 6 characters',
+					'role must not be empty',
+				];
 				expect(status).toBe(400);
-				expect(body).toHaveProperty('message', 'please input your name');
 				expect(body).toHaveProperty(
 					'message',
-					'please input your mail address'
+					expect.arrayContaining(errMessage)
 				);
-				expect(body).toHaveProperty('message', 'please input your password');
-				expect(body).toHaveProperty('message', 'role must not be empty');
 				done();
 			});
 	});
@@ -176,10 +186,8 @@ describe('POST /users/register', () => {
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty(
-					'message',
-					'please input valid mail address'
-				);
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('please input valid mail address');
 				done();
 			});
 	});
@@ -189,15 +197,15 @@ describe('POST /users/register', () => {
 			.post('/users/register')
 			.set('Content-Type', 'application/json')
 			.send({
-				name: 'Dummy1',
-				email: 'dummy1@gmail.com',
+				name: 'Dummy5',
+				email: 'dummy5@gmail.com',
 				password: '123',
 				role: 'customer',
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty(
-					'message',
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain(
 					'password at least must be 6 characters'
 				);
 				done();
@@ -210,22 +218,20 @@ describe('POST /users/register', () => {
 			.set('Content-Type', 'application/json')
 			.send({
 				name: 'Oz',
-				email: 'dummy1@gmail.com',
+				email: 'dummy6@gmail.com',
 				password: 'dummy123',
 				role: 'customer',
 			})
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty(
-					'message',
-					'name at least must be 3 characters'
-				);
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('name at least must be 3 characters');
 				done();
 			});
 	});
 });
 
-describe('POST /users/login', () => {
+describe('Login user: POST /users/login', () => {
 	it('success login with registered account, return status code 200, access_token and user property', (done) => {
 		request(app)
 			.post('/users/login')
@@ -245,8 +251,9 @@ describe('POST /users/login', () => {
 			.set('Content-Type', 'application/json')
 			.send({ email: 'dummy2@gmail.com', password: 'password1234' })
 			.then(({ status, body }) => {
-				expect(status).toBe(401);
-				expect(body).toHaveProperty('message', 'wrong email or password');
+				expect(status).toBe(400);
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('wrong email or password');
 				done();
 			});
 	});
@@ -257,8 +264,9 @@ describe('POST /users/login', () => {
 			.set('Content-Type', 'application/json')
 			.send({ email: 'dummy1@gmail.com', password: 'password' })
 			.then(({ status, body }) => {
-				expect(status).toBe(401);
-				expect(body).toHaveProperty('message', 'wrong email or password');
+				expect(status).toBe(400);
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('wrong email or password');
 				done();
 			});
 	});
@@ -270,10 +278,8 @@ describe('POST /users/login', () => {
 			.send({ email: '', password: '' })
 			.then(({ status, body }) => {
 				expect(status).toBe(400);
-				expect(body).toHaveProperty(
-					'message',
-					'please input your email and password'
-				);
+				expect(body).toHaveProperty('message');
+				expect(body.message).toContain('wrong email or password');
 				done();
 			});
 	});

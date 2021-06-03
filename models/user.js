@@ -15,20 +15,64 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	User.init(
 		{
-			name: DataTypes.STRING,
-			email: DataTypes.STRING,
-			password: DataTypes.STRING,
-			role: DataTypes.STRING,
+			name: {
+				type: DataTypes.STRING,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: 'please input your name',
+					},
+					len: {
+						args: [3],
+						msg: 'name at least must be 3 characters',
+					},
+				},
+			},
+			email: {
+				type: DataTypes.STRING,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: 'please input your mail address',
+					},
+					isEmail: {
+						args: true,
+						msg: 'please input valid mail address',
+					},
+				},
+			},
+			password: {
+				type: DataTypes.STRING,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: 'please input your password',
+					},
+					len: {
+						args: [6],
+						msg: 'password at least must be 6 characters',
+					},
+				},
+			},
+			role: {
+				type: DataTypes.STRING,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: 'role must not be empty',
+					},
+				},
+			},
 		},
 		{
 			sequelize,
-			modelName: 'User',
 			hooks: {
 				beforeCreate(user) {
 					const salt = bcrypt.genSaltSync(8);
 					user.password = bcrypt.hashSync(user.password, salt);
 				},
 			},
+			modelName: 'User',
 		}
 	);
 	return User;
