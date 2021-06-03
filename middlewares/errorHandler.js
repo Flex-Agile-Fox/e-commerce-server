@@ -32,6 +32,10 @@ const errorHandler = (err, req, res, next) => {
 			code = 401;
 			errors.push(err.message);
 			break;
+		case "ProductNotFound":
+			code = 404;
+			errors.push(err.message);
+			break;
 		default:
 			code = 500;
 			errors.push("Internal server error");

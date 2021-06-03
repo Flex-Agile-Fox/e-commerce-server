@@ -268,33 +268,229 @@ describe("POST /products", () => {
 	});
 });
 
-// describe("GET /products/:id", () => {
-// 	it("Success read product, return {sucess: true, product: {name, image_url, price, stock, description}}", (done) => {
-// 		request(app)
-// 			.get("/products/:id")
-// 			.set("Content-Type", "application/json")
-// 			.send({})
-// 			.then(({ body, status }) => {
-// 				expect(status).toBe(200);
-// 				// expect(body).toHaveProperty('access_token', expect.any(String));
-// 				done();
-// 			});
-// 	});
-// });
+describe("GET /products/:id", () => {
+	it("Success read product, return {sucess: true, product: {name, image_url, price, stock, description}}", (done) => {
+		const products = [
+			{
+				name: "test 1",
+				image_url: "image_test.url",
+				price: 1000,
+				stock: 5,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: "test 2",
+				image_url: "image_test.url",
+				price: 500,
+				stock: 2,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		];
 
-// describe("GET /products", () => {
-// 	it("Success read all products, return {sucess: true, products: [product, product]}", (done) => {
-// 		request(app)
-// 			.get("/products")
-// 			.set("Content-Type", "application/json")
-// 			.send({})
-// 			.then(({ body, status }) => {
-// 				expect(status).toBe(200);
-// 				// expect(body).toHaveProperty('access_token', expect.any(String));
-// 				done();
-// 			});
-// 	});
-// });
+		let admin;
+		User.findOne({
+			where: { email: default_user.email },
+		})
+			.then((admin_user) => {
+				admin = admin_user;
+				return queryInterface.bulkDelete("Products", null, {});
+			})
+			.then(() => {
+				return queryInterface.bulkInsert("Products", products);
+			})
+			.then(() => {
+				return Product.findOne({ where: { name: products[1].name } });
+			})
+			.then((product) => {
+				const access_token = jwt.sign(
+					{ id: admin.id, email: admin.email, role: admin.role },
+					process.env.JWT_SECRET
+				);
+				request(app)
+					.get(`/products/${product.id}`)
+					.set("Content-Type", "application/json")
+					.set("access_token", access_token)
+					.then(({ body, status }) => {
+						expect(status).toBe(200);
+						expect(body).toHaveProperty("success", true);
+						expect(body).toHaveProperty("product", expect.any(Object));
+						expect(body["product"]["name"]).toEqual(products[1].name);
+						done();
+					});
+			});
+	});
+
+	it("Fail read product missing access_token, return {sucess: false, errors=['Missing Token']}", (done) => {
+		const products = [
+			{
+				name: "test 1",
+				image_url: "image_test.url",
+				price: 1000,
+				stock: 5,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: "test 2",
+				image_url: "image_test.url",
+				price: 500,
+				stock: 2,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		];
+
+		let admin;
+		User.findOne({
+			where: { email: default_user.email },
+		})
+			.then((admin_user) => {
+				admin = admin_user;
+				return queryInterface.bulkDelete("Products", null, {});
+			})
+			.then(() => {
+				return queryInterface.bulkInsert("Products", products);
+			})
+			.then(() => {
+				return Product.findOne({ where: { name: products[1].name } });
+			})
+			.then((product) => {
+				const access_token = jwt.sign(
+					{ id: admin.id, email: admin.email, role: admin.role },
+					process.env.JWT_SECRET
+				);
+				request(app)
+					.get(`/products/${product.id}`)
+					.set("Content-Type", "application/json")
+					.then(({ body, status }) => {
+						expect(status).toBe(400);
+						expect(body).toHaveProperty("success", false);
+						expect(body["errors"]).toContain("Missing Token");
+						done();
+					});
+			});
+	});
+});
+
+describe("GET /products", () => {
+	it("Success read all products, return {sucess: true, products: [product, product]}", (done) => {
+		const products = [
+			{
+				name: "test 1",
+				image_url: "image_test.url",
+				price: 1000,
+				stock: 5,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: "test 2",
+				image_url: "image_test.url",
+				price: 500,
+				stock: 2,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		];
+
+		let admin;
+		User.findOne({
+			where: { email: default_user.email },
+		})
+			.then((admin_user) => {
+				admin = admin_user;
+				return queryInterface.bulkDelete("Products", null, {});
+			})
+			.then(() => {
+				return queryInterface.bulkInsert("Products", products);
+			})
+			.then(() => {
+				const access_token = jwt.sign(
+					{ id: admin.id, email: admin.email, role: admin.role },
+					process.env.JWT_SECRET
+				);
+				request(app)
+					.get("/products")
+					.set("Content-Type", "application/json")
+					.set("access_token", access_token)
+					.then(({ body, status }) => {
+						expect(status).toBe(200);
+						expect(body).toHaveProperty("success", true);
+						expect(body).toHaveProperty("products", expect.any(Array));
+						expect(body["products"][0]).toEqual(expect.any(Object));
+						expect(body["products"].length).toEqual(2);
+						done();
+						``;
+					});
+			});
+	});
+
+	it("Fail read products missing access_token, return {sucess: false, errors=['Missing Token']}", (done) => {
+		const products = [
+			{
+				name: "test 1",
+				image_url: "image_test.url",
+				price: 1000,
+				stock: 5,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: "test 2",
+				image_url: "image_test.url",
+				price: 500,
+				stock: 2,
+				category: "Hobby",
+				description: "Limited Edition",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		];
+
+		let admin;
+		User.findOne({
+			where: { email: default_user.email },
+		})
+			.then((admin_user) => {
+				admin = admin_user;
+				return queryInterface.bulkDelete("Products", null, {});
+			})
+			.then(() => {
+				return queryInterface.bulkInsert("Products", products);
+			})
+			.then(() => {
+				const access_token = jwt.sign(
+					{ id: admin.id, email: admin.email, role: admin.role },
+					process.env.JWT_SECRET
+				);
+				request(app)
+					.get("/products")
+					.set("Content-Type", "application/json")
+					.then(({ body, status }) => {
+						expect(status).toBe(400);
+						expect(body).toHaveProperty("success", false);
+						expect(body["errors"]).toContain("Missing Token");
+						done();
+					});
+			});
+	});
+});
 
 describe("PUT /products/:id", () => {
 	it("Success edit product, return {sucess: true, message: 'Product Successfully Editted'}", (done) => {

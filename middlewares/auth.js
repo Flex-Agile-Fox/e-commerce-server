@@ -38,7 +38,9 @@ const authorization = (req, res, next) => {
 			req.product = data;
 			next();
 		})
-		.catch((err) => next(err));
+		.catch((err) => {
+			throw { name: "ProductNotFound", message: "Product Not Found" };
+		});
 };
 
 module.exports = { authentication, authorization };

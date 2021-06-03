@@ -1,11 +1,22 @@
 const { Product } = require("../models");
 class ProductController {
 	static read(req, res, next) {
-		res.status(200).json({});
+		Product.findAll()
+			.then((products) => {
+				res.status(200).json({ success: true, products });
+			})
+			.catch((err) => next(err));
 	}
 
 	static readById(req, res, next) {
-		res.status(200).json({});
+		const { id } = req.params;
+		Product.findByPk(id)
+			.then((product) => {
+				res.status(200).json({ success: true, product });
+			})
+			.catch((err) => {
+				throw { name: "ProductNotFound", message: "Product Not Found" };
+			});
 	}
 
 	static add(req, res, next) {
