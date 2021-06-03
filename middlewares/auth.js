@@ -7,6 +7,7 @@ const authentication = (req, res, next) => {
   try {
     const decoded = jwt.verify(req.headers.access_token, process.env.JWT_SECRET);
     req.userId = decoded.id;
+    req.userRole = decoded.role;
   } catch (err) {
     return next({ name: 'INVALID_ACCESS_TOKEN' });
   }
@@ -22,14 +23,20 @@ const authentication = (req, res, next) => {
 const authorization = (req, res, next) => {
   const { id } = req.params;
 
-  Product.findOne({ where: { id: id, UserId: req.userId } })
-    .then((product) => {
-      if (!product) throw { name: 'PRODUCT_NOT_FOUND' };
+  if (req.userRole !== "admin") throw { name: "USER_NOT_AUTHORIZED" };
 
-      req.product = product;
-      next();
-    })
-    .catch((err) => next(err));
+
+  if(id) {
+    Product.findOne({ where: { id: id, UserId: req.userId } })
+      .then((product) => {
+        console.log(product)
+        if (!product) throw { name: 'PRODUCT_NOT_FOUND' };
+  
+        req.product = product;
+        next();
+      })
+      .catch((err) => next(err))
+  } else next();
 };
 
 module.exports = { authentication, authorization };

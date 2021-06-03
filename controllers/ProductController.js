@@ -3,11 +3,12 @@ const { Product, User } = require('../models');
 class ProductController {
 
   static add(req, res, next) {
+    console.log("product")
     const product = {
       name: req.body.name,
       image_url: req.body.image_url,
-      price: req.body.price,
-      stock: req.body.stock,
+      price: +req.body.price,
+      stock: +req.body.stock,
       UserId: req.userId
     }
     Product.create(product)
@@ -18,10 +19,7 @@ class ProductController {
   }
 
   static display(req, res, next) {
-    Product.findAll({
-      order: [['due_date', 'ASC']],
-      include: [User]
-    })
+    Product.findAll()
       .then(products => {
         res.status(200).json({ data: products })
       })
@@ -48,8 +46,8 @@ class ProductController {
 
     product.name = name
     product.image_url = image_url
-    product.price = price
-    product.stock = stock
+    product.price = +price
+    product.stock = +stock
 
     product.save()
       .then((_) => {

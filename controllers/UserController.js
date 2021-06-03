@@ -12,7 +12,7 @@ class UserController {
       .then((user) => {
         if(!user) throw { name: 'USER_NOT_FOUND' };
         if (user && bcrypt.compareSync(password, user.password)) {
-          const access_token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+          const access_token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET);
           res.status(200).json({ access_token });
         } else throw { name: 'LOGIN_FAILED' };
       })

@@ -3,7 +3,7 @@ const ProductController = require('../controllers/ProductController')
 const { authorization } = require('../middlewares/auth');
 
 
-router.post('/', ProductController.add)
+router.post('/', authorization, ProductController.add)
 router.get('/', ProductController.display)
 router.get('/:id', ProductController.detail)
 router.put('/:id', authorization, ProductController.update)
