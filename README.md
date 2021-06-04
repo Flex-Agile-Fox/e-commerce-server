@@ -17,10 +17,10 @@ http://localhost:3000/
 ## End Points
 * POST/register
 * POST/login
-* GET/products
-* POST/products
-* PUT/products/:id
-* DELETE/products/:id
+* GET/product
+* POST/product
+* PUT/product/:id
+* DELETE/product/:id
 
 
 ## Register Users
@@ -42,8 +42,9 @@ None
     Required:
     {
         name: req.body.name,
-        stock: req.body.stock
-        price: req.body.price
+        email: req.body.email
+        password: req.body.password
+        role: req.body.role
     }
     ```
 * Success Response:
@@ -97,8 +98,7 @@ None
     ```data
     {
         name: req.body.name,
-        stock: req.body.stock
-        price: req.body.price
+        email: req.body.email
     }
     ```
 * Success Response:
@@ -156,6 +156,7 @@ None
     ```data
     {
         name: req.body.name,
+        image_url: req.body.image_url
         stock: req.body.stock
         price: req.body.price
     }
@@ -168,7 +169,8 @@ None
         "success": true,
         "data": {
             "id": 1,
-            "name": "<product title>",
+            "name": "<product name>",
+            "image_url": "<product image_url>",
             "price": "<product price>",
             "stock": "<product stock>",
             "updatedAt": "2021-04-17T10:31:57.095Z",
@@ -232,7 +234,8 @@ None
         "data": [   
             {
                "id": 1,
-                "name": "<product title>",
+                "name": "<product name>",
+                "image_url": <product image_url>
                 "price": "<product price>",
                 "stock": "<product stock>",
                 "createdAt": "2021-04-17T10:10:34.365Z",
@@ -240,7 +243,8 @@ None
             },
             {
                 "id": 2,
-                "name": "<product title>",
+                "name": "<product name>",
+                "image_url": <product image_url>
                 "price": "<product price>",
                 "stock": "<product stock>",
                 "createdAt": "2021-04-17T10:10:34.365Z",
@@ -284,6 +288,7 @@ id
     Required: 
     {
         name: req.body.name,
+        image_url: req.body.image_url
         stock: req.body.stock
         price: req.body.price
     }
@@ -296,7 +301,8 @@ id
         "success": true,
         "data": {
             "id": 3,
-            "name": "<product title>",
+            "name": "<product name>",
+            "image_url": <product image_url>
             "price": "<product price>",
             "stock": "<product stock>",
             "createdAt": "2021-04-13T14:04:12.464Z",
