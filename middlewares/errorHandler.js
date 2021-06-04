@@ -13,7 +13,7 @@ const errorHandler = (err, req, res, next) => {
       break;
     case 'USER_NOT_FOUND':
       errorCode = 404;
-      errorMessages.push('User Not Found');
+      errorMessages.push('User not found');
       break;
     case 'USER_NOT_AUTHORIZED':
       errorCode = 401;

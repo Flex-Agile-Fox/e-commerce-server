@@ -6,6 +6,7 @@ class ProductController {
     const product = {
       name: req.body.name,
       image_url: req.body.image_url,
+      category: req.body.category,
       price: req.body.price,
       stock: req.body.stock,
       UserId: req.userId
@@ -40,11 +41,12 @@ class ProductController {
   }
 
   static update(req, res, next) {
-    const { name, image_url, price, stock } = req.body
+    const { name, image_url, category, price, stock } = req.body
     const { product } = req
 
     product.name = name
     product.image_url = image_url
+    product.category = category
     product.price = price
     product.stock = stock
 

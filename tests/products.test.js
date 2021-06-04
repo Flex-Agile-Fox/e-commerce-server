@@ -26,8 +26,9 @@ const customer = {
 };
 
 const product = {
-  name: 'celana', 
-  image_url: 'http://celanaurl.com',
+  name: 'kemeja', 
+  image_url: 'http://kemejaimg.com',
+  category: 'shirt',
   price: 30000,
   stock: 200
 };
@@ -35,20 +36,23 @@ const product = {
 const productNull = {
   name: '', 
   image_url: '',
+  category: '',
   price: null,
   stock: null
 };
 
 const productMin = {
-  name: 'celana', 
-  image_url: 'http://celanaurl.com',
+  name: 'kemeja', 
+  image_url: 'http://kemejaimg.com',
+  category: 'shirt',
   price: -1,
   stock: -2
 };
 
 const productFalse = {
-  name: 'celana', 
-  image_url: 'http://celanaurl.com',
+  name: 'kemeja', 
+  image_url: 'http://kemejaimg.com',
+  category: 'shirt',
   price: "price",
   stock: "stock"
 };
@@ -69,8 +73,9 @@ beforeAll((done) => {
     })
     .then(() => {
       return Product.create({
-        name: 'celana',
-        image_url: 'http://celanaurl.com',
+        name: 'kaos', 
+        image_url: 'http://kaosimg.com',
+        category: 't-shirt',
         price: 100000,
         stock: 50,
         UserId: admin.id
@@ -112,6 +117,7 @@ describe('POST /products', () => {
         expect(body.data).toHaveProperty('id', expect.any(Number));
         expect(body.data).toHaveProperty('name', expect.any(String));
         expect(body.data).toHaveProperty('image_url', expect.any(String));
+        expect(body.data).toHaveProperty('category', expect.any(String));
         expect(body.data).toHaveProperty('price', expect.any(Number));
         expect(body.data).toHaveProperty('stock', expect.any(Number));
         expect(body.data).toHaveProperty('UserId', expect.any(Number));
@@ -160,6 +166,7 @@ describe('POST /products', () => {
         expect(body).toHaveProperty('errorMessages', expect.any(Array));
         expect(body.errorMessages).toContain('Name must not be empty');
         expect(body.errorMessages).toContain('Image url must not be empty');
+        expect(body.errorMessages).toContain('Category must not be empty');
         expect(body.errorMessages).toContain('Invalid url');
         expect(body.errorMessages).toContain('Price must not be null');
         expect(body.errorMessages).toContain('Stock must not be null');
@@ -215,6 +222,7 @@ describe('GET /products', () => {
         expect(body.data[0]).toHaveProperty('id', expect.any(Number));
         expect(body.data[0]).toHaveProperty('name', expect.any(String));
         expect(body.data[0]).toHaveProperty('image_url', expect.any(String));
+        expect(body.data[0]).toHaveProperty('category', expect.any(String));
         expect(body.data[0]).toHaveProperty('price', expect.any(Number));
         expect(body.data[0]).toHaveProperty('stock', expect.any(Number));
         expect(body.data[0]).toHaveProperty('UserId', expect.any(Number));
@@ -253,6 +261,7 @@ describe('PUT /products/:id', () => {
         expect(body.data).toHaveProperty('id', expect.any(Number));
         expect(body.data).toHaveProperty('name', expect.any(String));
         expect(body.data).toHaveProperty('image_url', expect.any(String));
+        expect(body.data).toHaveProperty('category', expect.any(String));
         expect(body.data).toHaveProperty('price', expect.any(Number));
         expect(body.data).toHaveProperty('stock', expect.any(Number));
         expect(body.data).toHaveProperty('UserId', expect.any(Number));

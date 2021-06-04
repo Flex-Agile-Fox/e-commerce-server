@@ -67,7 +67,7 @@ describe('POST /users/login', () => {
       });
   });
 
-  it('Fail register if fill invalid email address, password less than 6 characters or empty field return error message', (done) => {
+  it('Fail register if fill invalid email address, password less than 6 characters or empty field, return error message', (done) => {
     request(app)
       .post('/users/register')
       .set('Content-Type', 'application/json')
@@ -125,7 +125,7 @@ describe('POST /users/login', () => {
       .then(({ body, status }) => {
         expect(status).toBe(404);
         expect(body).toHaveProperty('errorMessages', expect.any(Array));
-        expect(body.errorMessages).toContain('User Not Found');
+        expect(body.errorMessages).toContain('User not found');
         
         done();
         
