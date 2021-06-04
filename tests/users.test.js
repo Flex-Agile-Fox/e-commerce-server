@@ -3,7 +3,7 @@ const app = require('../app')
 
 // LOGIN
 describe('POST /login', ()=>{
-    it('SUCCESS: berhasil Login dan menerima access_token', (done)=>{
+    it('SUCCESS LOGIN: berhasil Login dan menerima access_token', (done)=>{
         request(app)
         .post('/login')
         .set('Content-Type','application/json')
@@ -20,7 +20,7 @@ describe('POST /login', ()=>{
         })
     })
 
-    it('ERROR: email ada, password salah', (done)=>{
+    it('ERROR LOGIN: email ada, password salah', (done)=>{
         request(app)
         .post('/login')
         .set('Content-Type','application/json')
@@ -32,11 +32,12 @@ describe('POST /login', ()=>{
         .then(({ body, status }) => {
             expect(status).toBe(401);
             expect(body).toHaveProperty("success", false);
+            expect(body).toHaveProperty("errMsg");
             done()
         })
     })
 
-    it('ERROR: email tidak ada di database', (done)=>{
+    it('ERROR LOGIN: email tidak ada di database', (done)=>{
         request(app)
         .post('/login')
         .set('Content-Type','application/json')
@@ -48,11 +49,13 @@ describe('POST /login', ()=>{
         .then(({ body, status }) => {
             expect(status).toBe(401);
             expect(body).toHaveProperty("success", false);
+            expect(body).toHaveProperty("errMsg");
+            expect(body.errMsg).toContain("Email tidak terdaftar")
             done()
         })
     })
 
-    it('ERROR: tidak memasukan email dan password', (done)=>{
+    it('ERROR LOGIN: tidak memasukan email dan password', (done)=>{
         request(app)
         .post('/login')
         .set('Content-Type','application/json')
@@ -64,6 +67,8 @@ describe('POST /login', ()=>{
         .then(({ body, status }) => {
             expect(status).toBe(401);
             expect(body).toHaveProperty("success", false);
+            expect(body).toHaveProperty("errMsg");
+            expect(body.errMsg).toContain("Username dan Password tidak boleh kosong")
             done()
         })
     })

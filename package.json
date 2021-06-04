@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test": "jest --runInBand --verbose --detectOpenHandles --forceExit",
     "dev": "nodemon app.js",
     "db:teardown": "sequelize-cli db:drop",
     "db:setup": "sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",

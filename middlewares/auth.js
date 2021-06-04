@@ -7,7 +7,7 @@ const authentication = (req,res,next) => {
     }else{
         try{
             const decode = jwt.verify(req.headers.access_token, process.env.JWT_SECREAT)
-            console.log(decode)
+            // console.log(decode)
             req.UserId = decode.id
             req.UserRole = decode.role
             // next()

@@ -40,7 +40,7 @@ const access_token_customer = jwt.sign(
 // =================== GET PRODUK
 
 describe('GET /product', () => {
-    it('SUCCESS: Berhasil get data semua Produk', (done) => {
+    it('SUCCESS GET PRODUCT: Berhasil get data semua Produk', (done) => {
         request(app)
             .get('/product')
             .set('Content-Type', 'application/json')
@@ -52,15 +52,17 @@ describe('GET /product', () => {
             });
     });
     
-    it('ERROR: access_token bukan admin', (done) => {
+    it('ERROR GET PRODUCT: access_token bukan admin', (done) => {
         request(app)
             .get('/product')
             .set('Content-Type', 'application/json')
             .set('access_token', access_token_customer)
             .then(({ body, status }) => {
-                console.log(body.errMsg[0]," MANTAP!! ini GETTERRESDS ==================================================================")
+                // console.log(body.errMsg[0]," MANTAP!! ini GETTERRESDS ==================================================================")
                 expect(status).toBe(401);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Anda tidak punya akses. silahkan hubungi admin")
                 done();
             });
     });
@@ -70,11 +72,10 @@ describe('GET /product', () => {
 // =================== GET PRODUK END
 
 
-
 // =================== POST PRODUK
 let idProduct
 describe('POST /product', () => {
-    it('SUCCESS: Berhasil tambah Produk', (done) => {
+    it('SUCCESS POST PRODUCT: Berhasil tambah Produk', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -94,7 +95,7 @@ describe('POST /product', () => {
     });
 
 
-    it('ERROR: access_token bukan admin', (done) => {
+    it('ERROR POST PRODUCT: access_token bukan admin', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -106,15 +107,16 @@ describe('POST /product', () => {
                 stock: 777
             })
             .then(({ body, status }) => {
-                console.log(body.errMsg[0]," MANTAP!! ini posttttt ==================================================================")
                 expect(status).toBe(401);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Anda tidak punya akses. silahkan hubungi admin")
                 done();
             });
     });
 
 
-    it('ERROR: Tidak menyertakan access_token', (done) => {
+    it('ERROR POST PRODUCT: Tidak menyertakan access_token', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -128,11 +130,13 @@ describe('POST /product', () => {
             .then(({ body, status }) => {
                 expect(status).toBe(401);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Access token tidak ditemukan")
                 done();
             });
     });
 
-    it('ERROR: name, image_url, price, stock tidak boleh kosong', (done) => {
+    it('ERROR POST PRODUCT: name, image_url, price, stock tidak boleh kosong', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -146,11 +150,13 @@ describe('POST /product', () => {
             .then(({ body, status }) => {
                 expect(status).toBe(400);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Nama tidak boleh kosong")
                 done();
             });
     });
 
-    it('ERROR: stock di isi angka minus', (done) => {
+    it('ERROR POST PRODUCT: stock di isi angka minus', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -162,14 +168,15 @@ describe('POST /product', () => {
                 stock: -1
             })
             .then(({ body, status }) => {
-                console.log(body.errMsg[0]," MANTAP!! ini posttttt ==================================================================")
                 expect(status).toBe(400);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Stock tidak boleh minus")
                 done();
             });
     });
 
-    it('ERROR: price di isi angka minus', (done) => {
+    it('ERROR POST PRODUCT: price di isi angka minus', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -183,11 +190,13 @@ describe('POST /product', () => {
             .then(({ body, status }) => {
                 expect(status).toBe(400);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Price tidak boleh minus")
                 done();
             });
     });
 
-    it('ERROR: price dan stock diisi string', (done) => {
+    it('ERROR POST PRODUCT: price dan stock diisi string', (done) => {
         request(app)
             .post('/product')
             .set('Content-Type', 'application/json')
@@ -195,12 +204,14 @@ describe('POST /product', () => {
             .send({
                 name: "buku gambar",
                 image_url: "test.jpg",
-                price: "uhuk uhuk",
-                stock: "test"
+                price: "abs",
+                stock: "fsldkj"
             })
             .then(({ body, status }) => {
                 expect(status).toBe(400);
                 expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Price harus di isi angka")
                 done();
             });
     });
@@ -210,11 +221,10 @@ describe('POST /product', () => {
 // =================== POST PRODUK END
 
 
-
 // =================== PUT PRODUK
 
 describe('PUT /product/:id', () => {
-    it('SUCCESS: Berhasil update data produk berdasarkan parameter', (done) => {
+    it('SUCCESS PUT PRODUCT: Berhasil update data produk berdasarkan parameter', (done) => {
         request(app)
             .put(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -231,7 +241,7 @@ describe('PUT /product/:id', () => {
             });
     });
 
-    it('ERROR: token bukan milik admin', (done) => {
+    it('ERROR PUT PRODUCT: token bukan milik admin', (done) => {
         request(app)
             .put(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -243,13 +253,14 @@ describe('PUT /product/:id', () => {
                 stock: 20
             })
             .then(({ body, status }) => {
-                console.log(body.errMsg[0]," MANTAP!! ini PUT ==================================================================")
                 expect(status).toBe(401);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Anda tidak punya akses. silahkan hubungi admin")
                 done();
             });
     });
 
-    it('ERROR: tidak menyertakan access_token', (done) => {
+    it('ERROR PUT PRODUCT: tidak menyertakan access_token', (done) => {
         request(app)
             .put(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -262,11 +273,13 @@ describe('PUT /product/:id', () => {
             })
             .then(({ body, status }) => {
                 expect(status).toBe(401);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Access token tidak ditemukan")
                 done();
             });
     });
 
-    it('ERROR: stock diisi angka minus', (done) => {
+    it('ERROR PUT PRODUCT: stock diisi angka minus', (done) => {
         request(app)
             .put(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -279,11 +292,13 @@ describe('PUT /product/:id', () => {
             })
             .then(({ body, status }) => {
                 expect(status).toBe(400);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Stock tidak boleh minus")
                 done();
             });
     });
 
-    it('ERROR: price diisi angka minus', (done) => {
+    it('ERROR PUT PRODUCT: price diisi angka minus', (done) => {
         request(app)
             .put(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -296,11 +311,13 @@ describe('PUT /product/:id', () => {
             })
             .then(({ body, status }) => {
                 expect(status).toBe(400);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Price tidak boleh minus")
                 done();
             });
     });
 
-    it('ERROR: field (price dan stok) diisi tipe data yang tidak sesuai (string)', (done) => {
+    it('ERROR PUT PRODUCT: field (price dan stok) diisi tipe data yang tidak sesuai (string)', (done) => {
         request(app)
             .put(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -313,6 +330,8 @@ describe('PUT /product/:id', () => {
             })
             .then(({ body, status }) => {
                 expect(status).toBe(400);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Price harus di isi angka")
                 done();
             });
     });
@@ -322,11 +341,10 @@ describe('PUT /product/:id', () => {
 // =================== PUT PRODUK END
 
 
-
 // =================== DELETE PRODUK
 
 describe('DELETE /product/:id', () => {
-    it('SUCCESS: Berhasil delete data produk berdasarkan id', (done) => {
+    it('SUCCESS DELETE PRODUCT: Berhasil delete data produk berdasarkan id', (done) => {
         request(app)
             .delete(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
@@ -337,24 +355,28 @@ describe('DELETE /product/:id', () => {
             });
     });
 
-    it('Error: access_Token bukan milik admin', (done) => {
+    it('ERROR DELETE PRODUCT: access_Token bukan milik admin', (done) => {
         request(app)
             .delete(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
             .set('access_token', access_token_customer)
             .then(({ body, status }) => { 
                 expect(status).toBe(401);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Anda tidak punya akses. silahkan hubungi admin")
                 done();
             });
     });
 
-    it('ERROR: tidak menyertakan access_token', (done) => {
+    it('ERROR DELETE PRODUCT: tidak menyertakan access_token', (done) => {
         request(app)
             .delete(`/product/${idProduct}`)
             .set('Content-Type', 'application/json')
             // .set('access_token', access_token)
             .then(({ body, status }) => {
                 expect(status).toBe(401);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Access token tidak ditemukan")
                 done();
             }); 
     });
@@ -362,3 +384,4 @@ describe('DELETE /product/:id', () => {
 });
 
 // =================== DELETE PRODUK END
+

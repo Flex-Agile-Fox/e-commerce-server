@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         min: {
           args: [0],
-          msg : "Stock tidak boleh minus"
+          msg : "Price tidak boleh minus"
         },
         isNumeric: {
           args: true,
