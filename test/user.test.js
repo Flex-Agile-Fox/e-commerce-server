@@ -36,6 +36,7 @@ afterAll((done) => {
 		});
 });
 
+//----------------------POST register
 describe('Register new User: POST /users/register', () => {
 	it('success register with fresh and valid email/password; return status code 201, and access_token and user property', (done) => {
 		request(app)
@@ -231,6 +232,7 @@ describe('Register new User: POST /users/register', () => {
 	});
 });
 
+//--------------POST login
 describe('Login user: POST /users/login', () => {
 	it('success login with registered account, return status code 200, access_token and user property', (done) => {
 		request(app)

@@ -22,7 +22,15 @@ class ProductController {
 			});
 	}
 	static detailProduct(req, res, next) {
-		res.status(200).json({ data: req.product });
+		const { id } = req.params;
+
+		Product.findByPk(id)
+			.then((product) => {
+				res.status(200).json({ data: product });
+			})
+			.catch((err) => {
+				throw { name: 'product_not_found' };
+			});
 	}
 	static editProduct(req, res, next) {
 		const { product } = req;

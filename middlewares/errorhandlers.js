@@ -30,6 +30,7 @@ const errorHandlers = (err, req, res, next) => {
 		case 'not_authorized':
 			statusCode = 400;
 			message.push('only admin that authorized');
+			break;
 		default:
 			statusCode = 500;
 			message.push('internal server error');

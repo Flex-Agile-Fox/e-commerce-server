@@ -1,15 +1,14 @@
 const jwt = require('jsonwebtoken');
 const { User, Product } = require('../models');
+const { JWT_SECRET } = process.env;
 
 const authentication = (req, res, next) => {
-	if (!req.headers.access_token) return next({ name: 'missing_access_token' });
+	const { access_token } = req.headers;
+	if (!access_token) return next({ name: 'missing_access_token' });
 	try {
-		const decoded = jwt.verify(
-			req.headers.access_token,
-			process.env.JWT_SECRET
-		);
+		const decoded = jwt.verify(access_token, JWT_SECRET);
 		req.userId = decoded.id;
-		req.userRole = decoded.id;
+		req.userRole = decoded.role;
 	} catch (err) {
 		return next({ name: 'invalid_access_token' });
 	}
@@ -25,17 +24,20 @@ const authentication = (req, res, next) => {
 };
 
 const productAuthorization = (req, res, next) => {
-	const { id } = req.params;
-
 	if (req.userRole !== 'admin') throw { name: 'not_authorized' };
 
-	Product.findOne({ where: { id } })
-		.then((product) => {
-			if (!product) throw { name: 'product_not_found' };
-			req.product = product;
-			next();
-		})
-		.catch((err) => next(err));
+	const { id } = req.params;
+	if (id) {
+		Product.findOne({ where: { id } })
+			.then((product) => {
+				if (!product) throw { name: 'product_not_found' };
+				req.product = product;
+				next();
+			})
+			.catch((err) => next(err));
+	} else {
+		next();
+	}
 };
 
 module.exports = { authentication, productAuthorization };
