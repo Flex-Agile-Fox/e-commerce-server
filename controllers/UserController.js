@@ -26,7 +26,7 @@ class UserController{
                     // jika password sesuai
                     if(bcrypt.compareSync(password, user.password)) {
                     // if(password === user.password) {
-                        const access_token = jwt.sign({id:user.id, email:user.email}, process.env.JWT_SECREAT)
+                        const access_token = jwt.sign({id:user.id,role:user.role, email:user.email}, process.env.JWT_SECREAT)
                         res.status(200).json(
                             {
                                 success: true, 
@@ -35,7 +35,6 @@ class UserController{
                                 name: user.name, 
                                 access_token
                             })
-                            console.log(access_token)
                     }else{
                         throw{name:'PASSWORD_FALSE'}
                     }

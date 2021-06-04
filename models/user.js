@@ -62,14 +62,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    // hooks: {
-    //   beforeCreate(pass){
-    //     const salt = bcrypt.genSaltSync(10);
-    //     const hash = bcrypt.hashSync(pass.password, salt);
-    //     pass.password = hash
+    hooks: {
+      beforeCreate(pass){
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(pass.password, salt);
+        pass.password = hash
 
-    //   }
-    // },
+      }
+    },
     modelName: 'User',
   });
   return User;

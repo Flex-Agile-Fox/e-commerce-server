@@ -1,6 +1,5 @@
 const request = require('supertest')
 const app = require('../app')
-const { sequelize, User } = require('../models');
 
 // LOGIN
 describe('POST /login', ()=>{

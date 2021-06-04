@@ -1,6 +1,6 @@
 const errorHandler = (err,req,res,next) => {
-    console.log('name ====>', err.name)
-    console.log('msg ====>', err.message)
+    // console.log('name ====>', err.name)
+    // console.log('msg ====>', err.message)
 
     let errStatus
     let errMsg = []
@@ -21,6 +21,10 @@ const errorHandler = (err,req,res,next) => {
         case 'MISSING_USER':
             errStatus = 401
             errMsg.push('User tidak ditemukan')
+            break;
+        case 'AUTHORIZATION_NOT_VALID':
+            errStatus = 401
+            errMsg.push('Anda tidak punya akses. silahkan hubungi admin')
             break;
         case 'LOGIN_VALIDATION':
             errStatus = 401
