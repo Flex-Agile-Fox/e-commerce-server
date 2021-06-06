@@ -210,9 +210,7 @@
     		"name": "customer",
     		"email": "customer@mail.com",
     		"password": "$2a$08$PiopwXfH/G81cO7XKVabE.hMb8NGbgXwEivgT1GZiAGc3qJKakECS",
-    		"role": "customer",
-    		"updatedAt": "2021-06-04T13:53:35.428Z",
-    		"createdAt": "2021-06-04T13:53:35.428Z"
+    		"role": "customer"
     	}
     }
     ```
@@ -294,9 +292,7 @@
     			"image_url": "google.com/Sepatu.jpg",
     			"price": 490000,
     			"stock": 5,
-    			"category": "Sport",
-    			"createdAt": "2021-06-04T14:00:10.818Z",
-    			"updatedAt": "2021-06-04T14:00:10.818Z"
+    			"category": "Sport"
     		},
     		{
     			"id": 2,
@@ -304,9 +300,7 @@
     			"image_url": "google.com/Sepatu1.jpg",
     			"price": 500000,
     			"stock": 4,
-    			"category": "Sport",
-    			"createdAt": "2021-06-04T14:00:27.625Z",
-    			"updatedAt": "2021-06-04T14:00:27.625Z"
+    			"category": "Sport"
     		}
     	]
     }
@@ -362,9 +356,7 @@
     		"image_url": "google.com/Sepatu1.jpg",
     		"price": 500000,
     		"stock": 4,
-    		"category": "Sport",
-    		"createdAt": "2021-06-04T14:00:27.625Z",
-    		"updatedAt": "2021-06-04T14:00:27.625Z"
+    		"category": "Sport"
     	}
     }
     ```
@@ -425,9 +417,7 @@
     		"image_url": "http://sandal",
     		"price": 17000,
     		"stock": 3,
-    		"category": "kids",
-    		"createdAt": "req.body.createdAt",
-    		"updatedAt": "req.body.updatedAt"
+    		"category": "kids"
     	}
     }
     ```

@@ -101,6 +101,7 @@ module.exports = (sequelize, DataTypes) => {
 			},
 		},
 		{
+			timestamps: false,
 			sequelize,
 			modelName: 'Product',
 		}
