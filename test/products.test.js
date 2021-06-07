@@ -27,7 +27,7 @@ const default_user_notadmin = {
 	createdAt: new Date(),
 	updatedAt: new Date(),
 };
-
+// default products setup
 const products = [
 	{
 		name: "test 1",
@@ -78,7 +78,7 @@ beforeAll((done) => {
 		})
 		.then((admin) => {
 			access_token_admin = jwt.sign(
-				{ id: admin.id, email: admin.email, role: admin.role },
+				{ id: admin.id, role: admin.role },
 				process.env.JWT_SECRET
 			);
 			return User.findOne({
@@ -87,7 +87,7 @@ beforeAll((done) => {
 		})
 		.then((not_admin) => {
 			access_token_not_admin = jwt.sign(
-				{ id: not_admin.id, email: not_admin.email, role: not_admin.role },
+				{ id: not_admin.id, role: not_admin.role },
 				process.env.JWT_SECRET
 			);
 		})
