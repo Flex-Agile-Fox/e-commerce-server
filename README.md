@@ -10,7 +10,7 @@ npm run dev to run
 
 **Base URL**
 
-http://localhost:3000
+https://agile-ecommerce-cms.herokuapp.com
 
 ---
 # Products
@@ -101,7 +101,7 @@ Returns new product
     ```javascript
       axios({
         method: 'POST',
-        url: `http://localhost:3000/products`,
+        url: `https://agile-ecommerce-cms.herokuapp.com/products`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -185,7 +185,7 @@ Returns all products
     ```javascript
       axios({
         method: 'GET',
-        url: 'http://localhost:3000/products',
+        url: 'https://agile-ecommerce-cms.herokuapp.com/products',
         headers: {
           token: localStorage.getItem('token')
         }
@@ -255,7 +255,7 @@ Returns product by id
     ```javascript
       axios({
         method: 'GET',
-        url: 'http://localhost:3000/products/:id',
+        url: 'https://agile-ecommerce-cms.herokuapp.com/products/:id',
         headers: {
           token: localStorage.getItem('token')
         }
@@ -344,7 +344,7 @@ Returns updated product
     ```javascript
       axios({
         method: 'PUT',
-        url: 'http://localhost:3000/products/:id',
+        url: 'https://agile-ecommerce-cms.herokuapp.com/products/:id',
         headers: {
           token: localStorage.getItem('token')
         },
@@ -412,7 +412,7 @@ Returns deleted product
     ```javascript
       axios({
         method: 'DELETE',
-        url: 'http://localhost:3000/products/:id',
+        url: 'https://agile-ecommerce-cms.herokuapp.com/products/:id',
         headers: {
           token: localStorage.getItem('token')
         }
@@ -484,7 +484,7 @@ POST /users/login
   ```javascript
     axios({
       method: 'POST',
-      url: 'http://localhost:3000/users/register',
+      url: 'https://agile-ecommerce-cms.herokuapp.com/users/register',
       data: {
         email, password, role
       }
@@ -549,7 +549,7 @@ POST /users/login
   ```javascript
     axios({
       method: 'POST',
-      url: 'http://localhost:3000/users/login',
+      url: 'https://agile-ecommerce-cms.herokuapp.com/users/login',
       data: {
         email, password
       }
