@@ -4,6 +4,7 @@
 	"description": "e-commerce-server",
 	"main": "app.js",
 	"scripts": {
+		"start": "node app.js",
 		"test": "SET NODE_ENV=test&&jest --verbose --runInBand --detectOpenHandles --forceExit",
 		"dev": "SET NODE_ENV=development&&nodemon app.js",
 		"setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
