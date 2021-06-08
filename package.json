@@ -4,7 +4,7 @@
   "description": "e-commerce-server",
   "main": "index.js",
   "scripts": {
-    "setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
+    "setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "setup:test": "sequelize-cli db:drop --env test && sequelize-cli db:create --env test && sequelize-cli db:migrate --env test",
     "dev": "nodemon app.js",
     "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit"
@@ -31,6 +31,7 @@
   "devDependencies": {
     "dotenv": "^10.0.0",
     "jest": "^27.0.3",
+    "sequelize-cli": "^6.2.0",
     "supertest": "^6.1.3"
   }
 }
