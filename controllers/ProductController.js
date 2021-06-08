@@ -20,6 +20,10 @@ class ProductController{
         });
     }
 
+    static getProductDetail(req,res,next) {
+        res.status(200).json({success:true, data: req.product})
+    }
+
     static putProduct(req,res,next) {
         const {id} = req.params
         const {name,image_url,price,stock} = req.body

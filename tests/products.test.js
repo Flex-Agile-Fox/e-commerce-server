@@ -221,6 +221,41 @@ describe('POST /product', () => {
 // =================== POST PRODUK END
 
 
+// =================== GET DETAIL PRODUK
+
+describe('GET /product/:id', () => {
+    it('SUCCESS GET DETAIL PRODUCT: Berhasil get detail Produk', (done) => {
+        request(app)
+            .get(`/product/${idProduct}`)
+            .set('Content-Type', 'application/json')
+            .set('access_token', access_token_admin)
+            .then(({ body, status }) => {
+                expect(status).toBe(200);
+                expect(body).toHaveProperty("success", true);
+                done();
+            });
+    });
+    
+    it('ERROR GET DETAIL PRODUCT: access_token bukan admin', (done) => {
+        request(app)
+            .get(`/product/${idProduct}`)
+            .set('Content-Type', 'application/json')
+            .set('access_token', access_token_customer)
+            .then(({ body, status }) => {
+                // console.log(body.errMsg[0]," MANTAP!! ini GETTERRESDS ==================================================================")
+                expect(status).toBe(401);
+                expect(body).toHaveProperty("success", false);
+                expect(body).toHaveProperty("errMsg");
+                expect(body.errMsg).toContain("Anda tidak punya akses. silahkan hubungi admin")
+                done();
+            });
+    });
+
+});
+
+// =================== GET DETAIL PRODUK END
+
+
 // =================== PUT PRODUK
 
 describe('PUT /product/:id', () => {
