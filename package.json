@@ -4,6 +4,7 @@
   "description": "e-commerce-server",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "setup:test": "sequelize-cli db:drop --env test && sequelize-cli db:create --env test && sequelize-cli db:migrate --env test",
     "dev": "nodemon app.js",
