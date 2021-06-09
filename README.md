@@ -34,6 +34,10 @@
   C:\Users\okihu\hacktiv8\phase-2\e-commerce-server> npm run dev
   ```
 
+Link server side Heroku: https://cms-admin-dashboard.herokuapp.com
+
+Link client side Firebase: https://cms-admin-dashboard.web.app
+
 =====================================================================================
 
 ## User Endpoint
