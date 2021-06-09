@@ -24,12 +24,13 @@ class ProductController {
 	static detailProduct(req, res, next) {
 		const { id } = req.params;
 
-		Product.findByPk(id)
+		Product.findOne({ where: { id } })
 			.then((product) => {
+				if (!product) throw { name: 'product_not_found' };
 				res.status(200).json({ data: product });
 			})
 			.catch((err) => {
-				throw { name: 'product_not_found' };
+				next(err);
 			});
 	}
 	static editProduct(req, res, next) {

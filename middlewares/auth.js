@@ -28,7 +28,7 @@ const productAuthorization = (req, res, next) => {
 
 	const { id } = req.params;
 	if (id) {
-		Product.findOne({ where: { id } })
+		Product.findOne({ where: { id: id } })
 			.then((product) => {
 				if (!product) throw { name: 'product_not_found' };
 				req.product = product;

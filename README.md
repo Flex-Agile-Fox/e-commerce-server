@@ -10,11 +10,15 @@
   C:\Users\okihu\hacktiv8\phase-2\e-commerce-server> npm install
   ```
 
-- After that create `.env` file on root folder. Copy the template variable on `.env-template` into `.env`, and fill the related credential for each variable.
+- Create `.env` file on root folder. Copy the template variable on `.env-template` into `.env`, and fill the related credential for each variable.
 
-- Please check script on package.json first before using any script. You can use it as it is if using windows machine, but if not (linux, Mac, etc) change "SET NODE_ENV=test/development&&" into "NODE_ENV=test/development"
+- Please check script on package.json first before using any command script. You can use it as it is if using windows machine, but if not (linux, Mac, etc) change "SET NODE_ENV=test" or "SET NODE_ENV=development&&" into "NODE_ENV=test" or "NODE_ENV=development"
 
 - Setup database(development env) by typing `npm run setup` from your terminal editor.
+
+- Setup database(test env) by typing `npm run setup:test` from your terminal editor.
+
+- Run jest test by `npm run test`
 
   Example:
 
