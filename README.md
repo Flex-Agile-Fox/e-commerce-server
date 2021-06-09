@@ -6,7 +6,7 @@ http://localhost:3000
 
 **Deployment URL**
 
-frontend:
+frontend: https://e-commerce-1255f.web.app
 backend: https://e-commerce-rendy.herokuapp.com
 
 # e-commerce-server
