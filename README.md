@@ -1,5 +1,27 @@
 # e-commerce-server
 
+**Instructions**
+
+# Production
+
+store variable in envtemplate in .env and assign value
+npm run setup
+npm start
+
+# Development
+
+create .env
+store variable in envtemplate in .env and assign value
+npm run setup:dev
+npm run dev
+
+# Test
+
+create .env
+store variable in envtemplate in .env and assign value
+npm run setup:test
+npm run test
+
 **Base URL**
 
 http://localhost:3000
