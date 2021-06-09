@@ -9,8 +9,8 @@ npm run setup to setup
 npm run dev to run
 
 **Base URL**
-
-https://agile-ecommerce-cms.herokuapp.com
+server: https://agile-ecommerce-cms.herokuapp.com
+client: https://agile-ecommerce-cms.web.app
 
 ---
 # Products
