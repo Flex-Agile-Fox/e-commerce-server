@@ -21,6 +21,7 @@ class ProductController {
 
 	static add(req, res, next) {
 		const { name, image_url, price, stock, category, description } = req.body;
+		console.log(req.body);
 		Product.create({ name, image_url, price, stock, category, description })
 			.then((product) => {
 				res.status(201).json({ success: true, data: product });

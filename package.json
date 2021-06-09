@@ -22,7 +22,7 @@
     "reset:dev": "npm run destroy:dev && npm run setup:dev",
     "setup:test": "NODE_ENV=test sequelize db:create && NODE_ENV=test sequelize db:migrate",
     "destroy:test": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:drop",
-    "dev": "NODE_ENV=development node app.js",
+    "dev": "NODE_ENV=development nodemon app.js",
     "test": "NODE_ENV=test jest --verbose --runInBand --detectOpenHandles --forceExit"
   },
   "repository": {
