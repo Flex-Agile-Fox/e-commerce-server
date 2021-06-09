@@ -15,6 +15,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "setup": "sequelize db:migrate && sequelize db:seed:all",
     "destroy": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all",
     "setup:dev": "NODE_ENV=development sequelize db:create && NODE_ENV=development sequelize db:migrate && NODE_ENV=development sequelize db:seed:all",
