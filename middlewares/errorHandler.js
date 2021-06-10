@@ -32,7 +32,7 @@ const errorHandler = (err,req,res,next) => {
             break;
         case 'LOGIN_FAIL':
             errStatus = 401
-            errMsg.push('Email tidak terdaftar')
+            errMsg.push('Username atau password anda salah')
             break;
         case 'PASSWORD_FALSE':
             errStatus = 401

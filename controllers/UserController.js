@@ -22,22 +22,23 @@ class UserController{
             User.findOne({where: {email}})
             .then((user) => {
                 // jika ada email
-                if(user) {
+                if(user && bcrypt.compareSync(password, user.password)) {
                     // jika password sesuai
-                    if(bcrypt.compareSync(password, user.password)) {
-                    // if(password === user.password) {
-                        const access_token = jwt.sign({id:user.id,role:user.role}, process.env.JWT_SECREAT)
-                        res.status(200).json(
-                            {
-                                success: true, 
-                                message: 'Anda berhasil login', 
-                                UserId: user.id, 
-                                name: user.name, 
-                                access_token
-                            })
-                    }else{
-                        throw{name:'PASSWORD_FALSE'}
-                    }
+                    const access_token = jwt.sign({id:user.id,role:user.role}, process.env.JWT_SECREAT)
+                    res.status(200).json(
+                        {
+                            success: true, 
+                            message: 'Anda berhasil login', 
+                            UserId: user.id, 
+                            name: user.name, 
+                            access_token
+                        })
+                    // if(bcrypt.compareSync(password, user.password)) {
+                    // // if(password === user.password) {
+                        
+                    // }else{
+                    //     throw{name:'PASSWORD_FALSE'}
+                    // }
                 }else{
                     throw{name:'LOGIN_FAIL'}
                 }

@@ -1,6 +1,20 @@
 # e-commerce-server
 
-## Base URL for development
+## Production
+* Server : https://e-commerce-cms-server-hacktiv8.herokuapp.com
+* Client : https://e-commerce-client-hacktiv8.web.app
+
+## Login Admin
+* email: admin@mail.com
+* password: admin
+
+## Set Up
+Buat folder .env kemudian copy dan paste semua isi pada file env.template<br/>
+npm install express
+npm run test (untuk menggunakan jest)
+npm run db:magic (untuk membuat database, table, sedders dan menjalankan nodemon)
+
+## Base URL for server development
 http://localhost:3000/
 
 

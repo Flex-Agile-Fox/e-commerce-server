@@ -12,7 +12,7 @@ class ProductController{
     }
 
     static getProduct(req,res,next) {
-        Product.findAll()
+        Product.findAll({order: [['id','DESC']]})
         .then((product) => {
             res.status(200).json({success:true, data: product})    
         }).catch((err) => {
