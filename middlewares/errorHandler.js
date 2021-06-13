@@ -37,6 +37,14 @@ const errorHandler = (err, req, res, next) => {
 			code = 404;
 			errors.push(err.message);
 			break;
+		case "QtyInsufficient":
+			code = 400;
+			errors.push(err.message);
+			break;
+		case "CartDoesNotExist":
+			code = 400;
+			errors.push(err.message);
+			break;
 		default:
 			code = 500;
 			errors.push("Internal server error");

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User, Product } = require("../models");
+const { User, Product, Cart } = require("../models");
 
 const authentication = (req, res, next) => {
 	const { access_token } = req.headers;
@@ -39,12 +39,36 @@ const authorizationProduct = (req, res, next) => {
 	const { id } = req.params;
 	Product.findByPk(id)
 		.then((data) => {
+			if (!data) {
+				throw { name: "ProductNotFound", message: "Product Not Found" };
+			}
 			req.product = data;
 			next();
 		})
 		.catch((err) => {
-			throw { name: "ProductNotFound", message: "Product Not Found" };
+			next(err);
 		});
 };
 
-module.exports = { authentication, authorizationRole, authorizationProduct };
+const authorizationCart = (req, res, next) => {
+	const { id } = req.params;
+	Cart.findByPk(id)
+		.then((cart) => {
+			if (!cart || cart.UserId !== req.user_id) {
+				throw {
+					name: "CartDoesNotExist",
+					message: "Cart Does Not Exist",
+				};
+			}
+			req.cart = cart;
+			next();
+		})
+		.catch((err) => next(err));
+};
+
+module.exports = {
+	authentication,
+	authorizationRole,
+	authorizationProduct,
+	authorizationCart,
+};
