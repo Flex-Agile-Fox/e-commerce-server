@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { OAuth2Client } = require('google-auth-library');
 
 class UserController {
 
@@ -24,6 +25,34 @@ class UserController {
           const access_token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET);
           res.status(200).json({ access_token });
         } else throw { name: 'LOGIN_FAILED' };
+      })
+      .catch((err) => next(err));
+  }
+
+  static google(req, res, next) {
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    const { idToken } = req.body;
+    if (!idToken) return next('MISSING_ACCESS_TOKEN');
+
+    let email;
+    let statusCode = 200;
+    client
+      .verifyIdToken({ idToken, audience: process.env.CLIENT_ID })
+      .then((ticket) => {
+        email = ticket.getPayload().email;
+        return User.findOne({ where: { email } });
+      })
+      .then((user) => {
+        if (user) return user;
+        statusCode = 201;
+        return User.create({
+          email,
+          password: process.env.DEFAULT_PASSWORD
+        });
+      })
+      .then((user) => {
+        const access_token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET);
+        res.status(statusCode).json({ access_token });
       })
       .catch((err) => next(err));
   }
