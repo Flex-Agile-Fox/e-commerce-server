@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
+			User.hasMany(models.Product);
+			User.hasMany(models.Cart);
 		}
 	}
 	User.init(
@@ -77,6 +79,10 @@ module.exports = (sequelize, DataTypes) => {
 						msg: "Role cannot be empty",
 					},
 				},
+			},
+			UserId: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 		},
 		{

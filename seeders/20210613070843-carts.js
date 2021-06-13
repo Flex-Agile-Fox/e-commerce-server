@@ -1,28 +1,20 @@
 "use strict";
-const bcrypt = require("bcrypt");
+let carts = require("../db.json").carts;
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync("123456", salt);
-		queryInterface.bulkInsert("Users", [
-			{
-				name: "admin",
-				email: "admin@admin.com",
-				password: hash,
-				role: "admin",
+		carts = carts.map((cart) => {
+			return {
+				...cart,
+				UserId: 2,
 				createdAt: new Date(),
 				updatedAt: new Date(),
-			},
-			{
-				name: "customer",
-				email: "customer@customer.com",
-				password: hash,
-				role: "customer",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-		]);
+			};
+		});
+		await queryInterface.bulkInsert("Carts", carts);
+		await queryInterface.sequelize.query(
+			`SELECT setval('"Carts_id_seq"', (SELECT MAX(id) FROM "Carts"));`
+		);
 		/**
 		 * Add seed commands here.
 		 *
@@ -35,7 +27,7 @@ module.exports = {
 	},
 
 	down: async (queryInterface, Sequelize) => {
-		queryInterface.bulkDelete("Users", null, {});
+		await queryInterface.bulkDelete("Carts", null, {});
 		/**
 		 * Add commands to revert seed here.
 		 *
