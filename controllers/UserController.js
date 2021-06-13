@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 class UserController {
 	static register(req, res, next) {
 		const { name, email, password } = req.body;
-		const role = "user";
+		const role = "customer";
 		User.create({
 			name,
 			email,

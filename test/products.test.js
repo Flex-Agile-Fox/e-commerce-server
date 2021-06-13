@@ -23,7 +23,7 @@ const default_user_notadmin = {
 	name: "not admin",
 	email: "notadmin@test.com",
 	password: hash,
-	role: "user",
+	role: "customer",
 	createdAt: new Date(),
 	updatedAt: new Date(),
 };

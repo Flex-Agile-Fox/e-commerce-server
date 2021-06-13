@@ -25,13 +25,17 @@ const authentication = (req, res, next) => {
 		.catch((err) => next(err));
 };
 
-const authorization = (req, res, next) => {
+const authorizationRole = (req, res, next) => {
 	if (req.user_role !== "admin") {
 		throw {
 			name: "Unauthorized",
 			message: "Not Authorized",
 		};
 	}
+	next();
+};
+
+const authorizationProduct = (req, res, next) => {
 	const { id } = req.params;
 	Product.findByPk(id)
 		.then((data) => {
@@ -43,4 +47,4 @@ const authorization = (req, res, next) => {
 		});
 };
 
-module.exports = { authentication, authorization };
+module.exports = { authentication, authorizationRole, authorizationProduct };

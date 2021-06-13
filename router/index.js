@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const userRoutes = require("./user");
 const productRoutes = require("./product");
-const { authentication, authorization } = require("../middlewares/auth");
+const { authentication, authorizationRole } = require("../middlewares/auth");
 
 router.use(`/users`, userRoutes);
-router.use(`/products`, authentication, productRoutes);
+router.use(`/products`, authentication, authorizationRole, productRoutes);
 
 module.exports = router;
