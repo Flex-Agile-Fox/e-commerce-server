@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Product extends Model {
+  class Transaction extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,81 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Product.belongsTo(models.User)
-      Product.hasMany(models.Transaction)
+      Transaction.belongsTo(models.User)
+      Transaction.belongsTo(models.Product)
     }
   };
-  Product.init({
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Name must not be empty'
-        }
-      }
-    },
-    image_url: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Image url must not be empty'
-        },
-        isUrl: {
-          args: true,
-          msg: 'Invalid url'
-        }
-      }
-    },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Category must not be empty'
-        }
-      }
-    },
-    price: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: {
-          args: true,
-          msg: 'Price must not be null'
-        },
-        isInt: {
-          args: true,
-          msg: 'Price must be integer'
-        },
-        min: {
-          args: [0],
-          msg: 'Price cannot be negative'
-        }
-      }
-    },
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: {
-          args: true,
-          msg: 'Stock must not be null'
-        },
-        isInt: {
-          args: true,
-          msg: 'Stock must be integer'
-        },
-        min: {
-          args: [0],
-          msg: 'Stock cannot be negative'
-        }
-      }
-    },
+  Transaction.init({
     UserId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -103,10 +33,74 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'User Id must be integer'
         }
       }
+    },
+    ProductId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Products',
+        key: 'id'
+      },
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Product Id must not be null'
+        },
+        isInt: {
+          args: true,
+          msg: 'Product Id must be integer'
+        }
+      }
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Status must not be empty'
+        }
+      }
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Quantity must not be null'
+        },
+        isInt: {
+          args: true,
+          msg: 'Quantity must be integer'
+        },
+        min: {
+          args: [0],
+          msg: 'Quantity cannot be negative'
+        }
+      }
+    },
+    total_price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Total price must not be null'
+        },
+        isInt: {
+          args: true,
+          msg: 'Total price must be integer'
+        },
+        min: {
+          args: [0],
+          msg: 'Total price cannot be negative'
+        }
+      }
     }
   }, {
     sequelize,
-    modelName: 'Product',
+    modelName: 'Transaction',
   });
-  return Product;
+  return Transaction;
 };

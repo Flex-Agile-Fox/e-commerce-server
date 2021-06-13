@@ -32,7 +32,7 @@ class ProductController {
 
     Product.findOne({ where: { id: id } })
     .then((product) => {
-      if (!product) throw { name: 'TASK_NOT_FOUND' };
+      if (!product) throw { name: 'PRODUCT_NOT_FOUND' };
       res.status(200).json({ data: product })
       // req.product = product;
       // next();

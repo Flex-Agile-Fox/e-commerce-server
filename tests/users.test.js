@@ -77,7 +77,6 @@ describe('POST /users/login', () => {
         expect(body).toHaveProperty('errorMessages', expect.any(Array));
         expect(body.errorMessages).toContain('Invalid email address');
         expect(body.errorMessages).toContain('Password must be at least 6 characters');
-        expect(body.errorMessages).toContain('Role must not be empty');
         
         done();
         

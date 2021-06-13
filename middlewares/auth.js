@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Product, User } = require('../models');
+const { Product, User, Transaction } = require('../models');
 
 const authentication = (req, res, next) => {
   if (!req.headers.access_token) return next({ name: 'MISSING_ACCESS_TOKEN' });
@@ -20,11 +20,10 @@ const authentication = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const authorization = (req, res, next) => {
+const adminAuthorization = (req, res, next) => {
   const { id } = req.params;
 
   if (req.userRole !== "admin") throw { name: "USER_NOT_AUTHORIZED" };
-
 
   if(id) {
     Product.findOne({ where: { id: id, UserId: req.userId } })
@@ -38,4 +37,17 @@ const authorization = (req, res, next) => {
   } else next();
 };
 
-module.exports = { authentication, authorization };
+const customerAuthorization = (req, res, next) => {
+  const { id } = req.params;
+
+  Transaction.findOne({ where: { id: id, UserId: req.userId } })
+    .then((transaction) => {
+      if (!transaction) throw { name: 'TRANSACTION_NOT_FOUND' };
+
+      req.transaction = transaction;
+      next();
+    })
+    .catch((err) => next(err))
+};
+
+module.exports = { authentication, adminAuthorization, customerAuthorization };

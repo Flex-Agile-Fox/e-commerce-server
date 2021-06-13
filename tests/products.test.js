@@ -15,7 +15,6 @@ const admin = {
   updatedAt: new Date(),
 };
 
-
 const customer = {
   id: 2,
   email: 'jane@example.com',
@@ -155,7 +154,7 @@ describe('POST /products', () => {
       });
   });
 
-  it('Fail add product if required field empty, return error message', (done) => {
+  it('Fail add product if required field empty or null, return error message', (done) => {
     request(app)
       .post('/products')
       .set('Content-Type', 'application/json')
@@ -378,7 +377,3 @@ describe('DELETE /products/:id', () => {
   });
 
 });
-
-
-
-
