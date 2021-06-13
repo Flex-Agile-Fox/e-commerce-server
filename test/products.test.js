@@ -10,6 +10,7 @@ const salt = bcrypt.genSaltSync(10);
 const default_password = "123456";
 const hash = bcrypt.hashSync(default_password, salt);
 let access_token_admin, access_token_not_admin;
+let UserId_admin, UserId_not_admin;
 const default_user = {
 	name: "admin",
 	email: "admin@test.com",
@@ -28,7 +29,7 @@ const default_user_notadmin = {
 	updatedAt: new Date(),
 };
 // default products setup
-const products = [
+let products = [
 	{
 		name: "test 1",
 		image_url: "image_test.url",
@@ -51,7 +52,7 @@ const products = [
 	},
 ];
 
-const product_default = {
+let product_default = {
 	name: "test to update",
 	image_url: "image_test.url",
 	price: 1000,
@@ -68,6 +69,9 @@ beforeAll((done) => {
 			return queryInterface.bulkDelete("Products", null, {});
 		})
 		.then(() => {
+			return queryInterface.bulkDelete("Users", null, {});
+		})
+		.then(() => {
 			const users = [default_user, default_user_notadmin];
 			return queryInterface.bulkInsert("Users", users);
 		})
@@ -77,6 +81,14 @@ beforeAll((done) => {
 			});
 		})
 		.then((admin) => {
+			UserId_admin = admin.id;
+			products = products.map((product) => {
+				return {
+					...product,
+					UserId: admin.id,
+				};
+			});
+			product_default.UserId = admin.id;
 			access_token_admin = jwt.sign(
 				{ id: admin.id, role: admin.role },
 				process.env.JWT_SECRET
@@ -86,6 +98,7 @@ beforeAll((done) => {
 			});
 		})
 		.then((not_admin) => {
+			UserId_not_admin = not_admin.id;
 			access_token_not_admin = jwt.sign(
 				{ id: not_admin.id, role: not_admin.role },
 				process.env.JWT_SECRET
@@ -112,7 +125,7 @@ afterAll((done) => {
 });
 
 describe("POST /products", () => {
-	it("Success add product, return {sucess: true, data: {name, image_url, price, stock, description}}", (done) => {
+	it("Success add product, return {sucess: true, data: {name, image_url, price, stock, description, UserId}}", (done) => {
 		request(app)
 			.post("/products")
 			.set("Content-Type", "application/json")
@@ -124,6 +137,7 @@ describe("POST /products", () => {
 				stock: 5,
 				category: "Hobby",
 				description: "Limited Edition",
+				UserId: UserId_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(201);
@@ -149,6 +163,7 @@ describe("POST /products", () => {
 				stock: 5,
 				category: "Hobby",
 				description: "Limited Edition",
+				UserId: UserId_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
@@ -170,6 +185,7 @@ describe("POST /products", () => {
 				stock: 5,
 				category: "Hobby",
 				description: "Limited Edition",
+				UserId: UserId_not_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(401);
@@ -191,6 +207,7 @@ describe("POST /products", () => {
 				stock: null,
 				category: "",
 				description: "",
+				UserId: UserId_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
@@ -217,6 +234,7 @@ describe("POST /products", () => {
 				stock: -1,
 				category: "Hobby",
 				description: "Limited Edition",
+				UserId: UserId_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
@@ -238,6 +256,7 @@ describe("POST /products", () => {
 				stock: -1,
 				category: "Hobby",
 				description: "Limited Edition",
+				UserId: UserId_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
@@ -259,6 +278,7 @@ describe("POST /products", () => {
 				stock: "stock",
 				category: "Hobby",
 				description: "Limited Edition",
+				UserId: UserId_admin,
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
@@ -515,14 +535,7 @@ describe("DELETE /products/:id", () => {
 					.delete(`/products/${product.id}`)
 					.set("Content-Type", "application/json")
 					.set("access_token", access_token_admin)
-					.send({
-						name: "test updated",
-						image_url: "image_test_updated.url",
-						price: 2,
-						stock: 6,
-						category: "Hobby",
-						description: "Limited Edition",
-					});
+					.send();
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(201);
@@ -538,14 +551,7 @@ describe("DELETE /products/:id", () => {
 				return request(app)
 					.delete(`/products/${product.id}`)
 					.set("Content-Type", "application/json")
-					.send({
-						name: "test updated",
-						image_url: "image_test_updated.url",
-						price: 2,
-						stock: 6,
-						category: "Hobby",
-						description: "Limited Edition",
-					});
+					.send();
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(400);
@@ -562,14 +568,7 @@ describe("DELETE /products/:id", () => {
 					.delete(`/products/${product.id}`)
 					.set("Content-Type", "application/json")
 					.set("access_token", access_token_not_admin)
-					.send({
-						name: "test updated",
-						image_url: "image_test_updated.url",
-						price: 2,
-						stock: 6,
-						category: "Hobby",
-						description: "Limited Edition",
-					});
+					.send();
 			})
 			.then(({ body, status }) => {
 				expect(status).toBe(401);
