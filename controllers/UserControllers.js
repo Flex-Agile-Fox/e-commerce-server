@@ -5,9 +5,9 @@ const { JWT_SECRET } = process.env;
 
 class UserController {
 	static register(req, res, next) {
-		const { name, email, password, role } = req.body;
+		const { name, email, password } = req.body;
 
-		User.create({ name, email, password, role })
+		User.create({ name, email, password, role: 'customer' })
 			.then((user) => {
 				const access_token = jwt.sign(
 					{ id: user.id, role: user.role },

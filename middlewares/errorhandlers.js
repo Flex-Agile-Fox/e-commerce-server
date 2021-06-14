@@ -1,4 +1,5 @@
 const errorHandlers = (err, req, res, next) => {
+	console.log(err);
 	let statusCode;
 	let message = [];
 
@@ -30,6 +31,14 @@ const errorHandlers = (err, req, res, next) => {
 		case 'not_authorized':
 			statusCode = 400;
 			message.push('only admin that authorized');
+			break;
+		case 'exceed_stock':
+			statusCode = 400;
+			message.push('quantity exceed stock');
+			break;
+		case 'not_found':
+			statusCode = 400;
+			message.push('product not found in the cart');
 			break;
 		default:
 			statusCode = 500;

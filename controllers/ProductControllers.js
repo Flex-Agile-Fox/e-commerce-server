@@ -1,4 +1,4 @@
-const { Product } = require('../models');
+const { Product, Cart } = require('../models');
 
 class ProductController {
 	static addProduct(req, res, next) {

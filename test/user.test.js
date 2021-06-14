@@ -128,25 +128,7 @@ describe('Register new User: POST /users/register', () => {
 			});
 	});
 
-	it('fail register due to role is empty; return status code 400, and error message', (done) => {
-		request(app)
-			.post('/users/register')
-			.set('Content-Type', 'application/json')
-			.send({
-				name: 'Dummy1',
-				email: 'dummy4@gmail.com',
-				password: 'password123',
-				role: '',
-			})
-			.then(({ status, body }) => {
-				expect(status).toBe(400);
-				expect(body).toHaveProperty('message');
-				expect(body.message).toContain('role must not be empty');
-				done();
-			});
-	});
-
-	it('fail register due to name, email, password, and role is empty; return status 400, and error message', (done) => {
+	it('fail register due to name, email, and password; return status 400, and error message', (done) => {
 		request(app)
 			.post('/users/register')
 			.set('Content-Type', 'application/json')
@@ -164,7 +146,6 @@ describe('Register new User: POST /users/register', () => {
 					'please input valid mail address',
 					'please input your password',
 					'password at least must be 6 characters',
-					'role must not be empty',
 				];
 				expect(status).toBe(400);
 				expect(body).toHaveProperty(

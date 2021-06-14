@@ -91,7 +91,7 @@ afterAll((done) => {
 
 // -----------------------------------POST
 describe('Add new product: POST /products', () => {
-	it('success add new product using admin account, return result code 201and data new product', (done) => {
+	it('success add new product using admin account, return result code 201 and data new product', (done) => {
 		request(app)
 			.post('/products')
 			.set({
