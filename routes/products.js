@@ -1,8 +1,9 @@
 const router = require('express').Router()
 const ProductController = require('../controllers/ProductController')
-const { adminAuthorization } = require('../middlewares/auth');
+const { authentication, adminAuthorization } = require('../middlewares/auth');
 
-
+router.get('/display', ProductController.display)
+router.use(authentication);
 router.post('/', adminAuthorization, ProductController.add)
 router.get('/', ProductController.display)
 router.get('/:id', ProductController.detail)

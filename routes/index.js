@@ -6,8 +6,8 @@ const { authentication } = require('../middlewares/auth');
 
 
 router.use('/users', userRoutes)
-router.use(authentication);
 router.use('/products', productRoutes)
+router.use(authentication);
 router.use('/transactions', transactionRoutes)
 
 
