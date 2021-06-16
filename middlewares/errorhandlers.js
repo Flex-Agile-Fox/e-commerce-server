@@ -1,5 +1,5 @@
 const errorHandlers = (err, req, res, next) => {
-  console.log(err);
+  // console.log(err);
   let statusCode;
   let message = [];
 
@@ -39,6 +39,10 @@ const errorHandlers = (err, req, res, next) => {
     case 'not_found':
       statusCode = 400;
       message.push('product not found in the cart');
+      break;
+    case 'cart_not_found':
+      statusCode = 400;
+      message.push('cart not found');
       break;
     case 'exceed_min_qty':
       statusCode = 400;
