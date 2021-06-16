@@ -45,6 +45,10 @@ const errorHandler = (err, req, res, next) => {
 			code = 400;
 			errors.push(err.message);
 			break;
+		case "NoItemInCarts":
+			code = 400;
+			errors.push(err.message);
+			break;
 		default:
 			code = 500;
 			errors.push("Internal server error");

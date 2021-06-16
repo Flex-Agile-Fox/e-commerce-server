@@ -1,4 +1,5 @@
 const { Cart, Product } = require("../models");
+const printToPdf = require("../helpers/jspdf");
 
 class CartController {
 	static read(req, res, next) {
@@ -17,6 +18,12 @@ class CartController {
 					throw { name: "ProductNotFound", message: "Product Not Found" };
 				}
 				stock = product.stock;
+				if (stock < Number(quantity)) {
+					throw {
+						name: "QtyInsufficient",
+						message: "Quantity Not Sufficient",
+					};
+				}
 				return Cart.findOne({
 					where: {
 						UserId: req.user_id,
@@ -26,13 +33,13 @@ class CartController {
 			})
 			.then((cart) => {
 				if (cart) {
-					if (stock < +quantity + +cart.quantity) {
+					if (stock < Number(quantity) + Number(cart.quantity)) {
 						throw {
 							name: "QtyInsufficient",
 							message: "Quantity Not Sufficient",
 						};
 					}
-					cart.quantity += +quantity;
+					cart.quantity += Number(quantity);
 					return cart.save();
 				}
 				if (!cart) {
@@ -94,17 +101,23 @@ class CartController {
 	static checkout(req, res, next) {
 		Cart.findAll({ where: { UserId: req.user_id }, include: Product })
 			.then((carts) => {
-				let checkout = "Checkout Summary\n";
-				let total = 0;
+				if (!carts.length) {
+					throw {
+						name: "NoItemInCarts",
+						message: "No Item In Carts",
+					};
+				}
 				carts.forEach(async (cart) => {
-					const subTotalItem = cart.quantity * cart.Product.price;
-					checkout += `${cart.name.toUpperCase()}: ${cart.quantity} x ${
-						cart.Product.price
-					} = ${subTotalItem} \n`;
-					total += subTotalItem;
+					let product = await Product.findByPk(cart.ProductId);
+					product.stock -= cart.quantity;
+					await product.save();
+					await cart.destroy();
 				});
-				checkout += `Total checkout ${total}`;
-				res.status(200).json({ success: true, checkout });
+				// res
+				// .status(200)
+				// .json({ success: true, message: "Checkout Successfull" })
+				res.contentType("application/pdf");
+				res.send(printToPdf(carts));
 			})
 			.catch((err) => next(err));
 	}
