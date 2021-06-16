@@ -3,18 +3,25 @@ const { Transaction, Product } = require('../models');
 class TransactionController {
 
   static add(req, res, next) {
-    const transaction = {
+    const newTransaction = {
       UserId: req.userId,
-      ProductId: req.body.productId,
+      ProductId: req.params.productId,
       status: req.body.status,
       quantity: req.body.quantity,
       total_price: req.body.total_price
     }
-    Transaction.create(transaction)
-      .then(transaction => {
-        res.status(201).json({ data: transaction })
+    Transaction.findOne({ where: { ProductId: req.params.productId } })
+      .then((transaction) => {
+        if (transaction) {
+          transaction.quantity += 1
+          transaction.total_price += newTransaction.total_price
+          return transaction.save()
+        } else return Transaction.create(newTransaction)
       })
-      .catch((err) => next(err));
+        .then(transaction => {
+          res.status(201).json({ data: transaction })
+        })
+        .catch((err) => next(err));
   }
 
   static display(req, res, next) {
