@@ -3,6 +3,7 @@ const { authorizationCart } = require("../middlewares/auth");
 const router = require("express").Router();
 
 router.get("/", CartController.read);
+router.get("/checkout", CartController.checkout);
 router.post("/", CartController.add);
 router.put("/:id", authorizationCart, CartController.edit);
 router.delete("/:id", authorizationCart, CartController.delete);

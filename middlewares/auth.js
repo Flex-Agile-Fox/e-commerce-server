@@ -52,6 +52,7 @@ const authorizationProduct = (req, res, next) => {
 
 const authorizationCart = (req, res, next) => {
 	const { id } = req.params;
+	// console.log(id);
 	Cart.findByPk(id)
 		.then((cart) => {
 			if (!cart || cart.UserId !== req.user_id) {

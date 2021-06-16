@@ -26,13 +26,13 @@ class CartController {
 			})
 			.then((cart) => {
 				if (cart) {
-					if (stock < quantity + cart.quantity) {
+					if (stock < +quantity + +cart.quantity) {
 						throw {
 							name: "QtyInsufficient",
 							message: "Quantity Not Sufficient",
 						};
 					}
-					cart.quantity += quantity;
+					cart.quantity += +quantity;
 					return cart.save();
 				}
 				if (!cart) {
@@ -62,13 +62,13 @@ class CartController {
 					throw { name: "ProductNotFound", message: "Product Not Found" };
 				}
 				stock = product.stock;
-				if (stock < quantity + cart.quantity) {
+				if (stock < +quantity) {
 					throw {
 						name: "QtyInsufficient",
 						message: "Quantity Not Sufficient",
 					};
 				}
-				cart.quantity += quantity;
+				cart.quantity = +quantity;
 				return cart.save();
 			})
 			.then(() => {
@@ -88,6 +88,23 @@ class CartController {
 				res
 					.status(201)
 					.json({ success: true, message: "Cart Successfully Deleted" });
+			})
+			.catch((err) => next(err));
+	}
+	static checkout(req, res, next) {
+		Cart.findAll({ where: { UserId: req.user_id }, include: Product })
+			.then((carts) => {
+				let checkout = "Checkout Summary\n";
+				let total = 0;
+				carts.forEach(async (cart) => {
+					const subTotalItem = cart.quantity * cart.Product.price;
+					checkout += `${cart.name.toUpperCase()}: ${cart.quantity} x ${
+						cart.Product.price
+					} = ${subTotalItem} \n`;
+					total += subTotalItem;
+				});
+				checkout += `Total checkout ${total}`;
+				res.status(200).json({ success: true, checkout });
 			})
 			.catch((err) => next(err));
 	}
