@@ -69,6 +69,20 @@ class TransactionController {
       })
       .catch((err) => next(err));
   }
+
+  static updateQty(req, res, next) {
+    const { quantity, total_price } = req.body
+    const { transaction } = req
+
+    transaction.quantity = quantity
+    transaction.total_price = total_price
+
+    transaction.save()
+      .then((_) => {
+        res.status(200).json({ data: transaction });
+      })
+      .catch((err) => next(err));
+  }
 }
 
 module.exports = TransactionController
