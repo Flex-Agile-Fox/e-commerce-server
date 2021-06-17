@@ -1,4 +1,4 @@
-const {User, Product} = require('../models')
+const {User, Product, Cart} = require('../models')
 const jwt = require('jsonwebtoken')
 
 const authentication = (req,res,next) => {
@@ -54,5 +54,20 @@ const productAuthorization = (req,res,next) => {
     }
 }
 
+const cartAuthorization = (req,res,next) => {
+    const {id} = req.params
+        // jika ada parameter (untuk put & delete)
+    Cart.findOne({where: {id}})
+    .then((cart) => {
+    if(!cart){
+        throw{name: 'DATA_NOT_FOUND'}
+    }
+    req.cart = cart
+    next()
+    }).catch((err) => {
+        next(err)
+    });
+}
 
-module.exports = {authentication, productAuthorization} 
+
+module.exports = {authentication, productAuthorization, cartAuthorization} 

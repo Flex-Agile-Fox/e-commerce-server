@@ -51,23 +51,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     
     role: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "Role tidak boleh kosong"
-        }
-      }
+      type: DataTypes.STRING
     }
   }, {
     sequelize,
     hooks: {
-      beforeCreate(pass){
+      beforeCreate(user){
         const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(pass.password, salt);
-        pass.password = hash
-
+        const hash = bcrypt.hashSync(user.password, salt);
+        user.password = hash
+        user.role = 'Customer'
       }
     },
     modelName: 'User',

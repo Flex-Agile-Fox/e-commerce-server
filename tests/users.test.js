@@ -49,8 +49,6 @@ describe('POST /login', ()=>{
         .then(({ body, status }) => {
             expect(status).toBe(401);
             expect(body).toHaveProperty("success", false);
-            expect(body).toHaveProperty("errMsg");
-            expect(body.errMsg).toContain("Email tidak terdaftar")
             done()
         })
     })

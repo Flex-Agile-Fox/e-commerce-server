@@ -42,6 +42,10 @@ const errorHandler = (err,req,res,next) => {
             errStatus = 404
             errMsg.push('Data tidak ditemukan')
             break;
+        case 'STOCK_NOT_ENOUGH':
+            errStatus = 404
+            errMsg.push('Stok tidak cukup')
+            break;
         case 'SequelizeUniqueConstraintError':
             errStatus = 409
             errMsg.push('Data duplikat')

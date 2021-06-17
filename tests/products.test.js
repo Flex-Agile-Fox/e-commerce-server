@@ -51,21 +51,6 @@ describe('GET /product', () => {
                 done();
             });
     });
-    
-    it('ERROR GET PRODUCT: access_token bukan admin', (done) => {
-        request(app)
-            .get('/product')
-            .set('Content-Type', 'application/json')
-            .set('access_token', access_token_customer)
-            .then(({ body, status }) => {
-                // console.log(body.errMsg[0]," MANTAP!! ini GETTERRESDS ==================================================================")
-                expect(status).toBe(401);
-                expect(body).toHaveProperty("success", false);
-                expect(body).toHaveProperty("errMsg");
-                expect(body.errMsg).toContain("Anda tidak punya akses. silahkan hubungi admin")
-                done();
-            });
-    });
 
 });
 

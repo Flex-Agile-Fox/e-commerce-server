@@ -1,9 +1,7 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Product extends Model {
+  class Cart extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,70 +9,70 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Product.hasMany(models.Cart)
+      Cart.belongsTo(models.User)
+      Cart.belongsTo(models.Product)
     }
   };
-  Product.init({
-    name: {
-      type: DataTypes.STRING,
+  Cart.init({
+    UserId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: {
           args: true,
-          msg: "Nama tidak boleh kosong"
+          msg: 'UserId kosong'
         }
       }
     },
-    
-    image_url: {
+    ProductId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      type: DataTypes.STRING,
       validate: {
         notEmpty: {
           args: true,
-          msg: "Image tidak boleh kosong"
+          msg: 'ProductId kosong'
         }
       }
-    },
+    }, 
+    qty: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Quantity tidak boleh kosong'
+        },
+        min: {
+          args: [0],
+          msg : "qty tidak boleh minus"
+        },
+        isNumeric: {
+          args: true,
+          msg: "qty harus di isi angka"
+        }
+      }
+    }, 
     price: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: {
           args: true,
-          msg: "Price tidak boleh kosong"
+          msg: 'Price tidak boleh kosong'
         },
         min: {
           args: [0],
-          msg : "Price tidak boleh minus"
+          msg : "price tidak boleh minus"
         },
         isNumeric: {
           args: true,
-          msg: "Price harus di isi angka"
-        }
-      }
-    },
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "Stock tidak boleh kosong"
-        },
-        min: {
-          args: [0],
-          msg : "Stock tidak boleh minus"
-        },
-        isNumeric: {
-          args: true,
-          msg: "Stock harus di isi angka"
+          msg: "price harus di isi angka"
         }
       }
     }
   }, {
     sequelize,
-    modelName: 'Product',
+    modelName: 'Cart',
   });
-  return Product;
+  return Cart;
 };

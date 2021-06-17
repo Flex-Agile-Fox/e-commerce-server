@@ -35,6 +35,10 @@ http://localhost:3000/
 * POST/product
 * PUT/product/:id
 * DELETE/product/:id
+* GET/cart
+* POST/cart
+* PUT/cart/:id
+* DELETE/cart/:id
 
 
 ## Register Users
@@ -370,6 +374,236 @@ None
     Code: 200
     Content:
     {message:"product Success Delete"}
+    ```
+    - OR
+    Code: 404
+    ```err
+    Content
+    {
+        "success": false,
+        "errorMessage": "Data tidak ditemukan"
+    }
+    ```
+* Error Response:
+    Code: 500
+    ```err
+    Content:
+    {
+        "success": false,
+        "errorMessage": "Internal Server Error"
+    }
+    ```
+
+
+
+## Add Cart
+Menambahkan data Cart
+* URL
+```url
+/cart
+```
+* Method:
+```url
+POST
+```
+* Request Headers
+```headers
+access_token : <access token>
+```
+* URL Params
+```params
+None
+```
+* Data Body
+    Required:
+    ```data
+    {
+        "UserId": 2,
+        "ProductId": 1,
+        "qty": 1,
+        "price": 1000
+    }
+    ```
+* Success Response:
+    Code: 201
+    ```response
+    Content:
+    {
+        "success": true,
+        "data": {
+            "id": 1,
+            "UserId": "<Cart UserId>",
+            "ProductId": "<Cart ProductId>",
+            "qty": "<Cart qty>",
+            "price": "<Cart price>",
+            "updatedAt": "2021-04-17T10:31:57.095Z",
+            "createdAt": "2021-04-17T10:31:57.095Z"
+        }
+    }
+    ```
+* Error Response:
+    Code: 500
+    ```or
+    Content:
+    {
+        "success": false,
+        "errorMessage": "Internal Server Error"
+    }
+    ```
+
+
+## Get cart
+Menampilkan semua data cart
+* URL
+```url
+/cart
+```
+* Method:
+```method
+GET
+```
+* Request Headers
+```headers
+access_token : <access token>
+```
+* URL Params
+```params
+None
+```
+* Data Body
+```data
+None
+```
+* Success Response:
+    Code: 200
+    ```response
+    Content:
+    {
+        "success": true,
+        "data": [   
+            {
+               "id": 1,
+                "UserId": "<UserId>",
+                "ProductId": <UserId>
+                "qty": "<cart qty>",
+                "price": "<cart price>",
+                "createdAt": "2021-04-17T10:10:34.365Z",
+                "updatedAt": "2021-04-17T10:10:34.365Z"
+            },
+            {
+               "id": 2,
+                "UserId": "<UserId>",
+                "ProductId": <UserId>
+                "qty": "<cart qty>",
+                "price": "<cart price>",
+                "createdAt": "2021-04-17T10:10:34.365Z",
+                "updatedAt": "2021-04-17T10:10:34.365Z"
+            },
+        ]
+    }
+    ```
+* Error Response:
+    Code: 500
+    ```err
+    Content
+    {
+        "success": false,
+        "errorMessage": "Internal Server Error"
+    }
+    ```
+
+
+## Update cart
+Mengupdate semua field pada data cart
+* URL
+```url
+/cart/:id
+```
+* Method:
+```method
+PUT
+```
+* Request Headers
+```headers
+access_token : <access token>
+```
+* URL Params
+```params
+id
+```
+* Data Body
+    ```data
+    Required: 
+    {
+        "UserId": 2,
+        "ProductId": 1,
+        "qty": 1,
+        "price": 1000
+    }
+    ```
+* Success Response:
+    Code: 201
+    ```response
+    Content:
+    {
+        "success": true,
+        "data": {
+            "id": 1,
+            "UserId": "<Cart UserId>",
+            "ProductId": "<Cart ProductId>",
+            "qty": "<Cart qty>",
+            "price": "<Cart price>",
+            "updatedAt": "2021-04-17T10:31:57.095Z",
+            "createdAt": "2021-04-17T10:31:57.095Z"
+        }
+    }
+    ```
+    - OR
+    Code: 404
+    ```err
+    Content:
+    {
+        "success": false,
+        "errorMessage": "Data tidak ditemukan"
+    }
+    ```
+* Error Response:
+    Code: 500
+    Content:
+    {
+        "success": false,
+        "errorMessage": "Internal Server Error"
+    }
+    ```
+
+
+
+# Delete cart
+Menghapus data cart
+* URL
+```url
+/cart/:id
+```
+* Method:
+```delete
+DELETE
+```
+* Request Headers
+```headers
+access_token : <access token>
+```
+* URL Params
+```params
+id
+```
+* Data Params
+```data
+None
+```
+* Success Response:
+    Code: 200
+    Content:
+    {message:"cart Success Delete"}
     ```
     - OR
     Code: 404
