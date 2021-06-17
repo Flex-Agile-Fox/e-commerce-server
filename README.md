@@ -2,7 +2,8 @@
 
 ## Production
 * Server : https://e-commerce-cms-server-hacktiv8.herokuapp.com
-* Client : https://e-commerce-client-hacktiv8.web.app
+* Client CMS : https://e-commerce-client-hacktiv8.web.app
+* Client Customer : https://e-commerce-client-hacktiv8.web.app
 
 ## Login Admin
 * email: admin@mail.com
@@ -10,7 +11,7 @@
 
 ## Set Up
 Buat folder .env kemudian copy dan paste semua isi pada file env.template<br/>
-npm install express
+npm install
 npm run test (untuk menggunakan jest)
 npm run db:magic (untuk membuat database, table, sedders dan menjalankan nodemon)
 
@@ -27,10 +28,12 @@ http://localhost:3000/
 * pg (database postgres)
 * jest
 * supertest
+* google library
 
 ## End Points
 * POST/register
 * POST/login
+* POST/google
 * GET/product
 * POST/product
 * PUT/product/:id
