@@ -47,7 +47,8 @@ class UserController {
         statusCode = 201;
         return User.create({
           email,
-          password: process.env.DEFAULT_PASSWORD
+          password: process.env.DEFAULT_PASSWORD,
+          role: 'customer'
         });
       })
       .then((user) => {

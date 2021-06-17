@@ -31,6 +31,10 @@ const errorHandler = (err, req, res, next) => {
       errorCode = 404;
       errorMessages.push('Transaction not found');
       break;
+    case 'STOCK_NOT_ENOUGH':
+      errorCode = 401;
+      errorMessages.push('Stock not enough');
+      break;
     case 'LOGIN_FAILED':
       errorCode = 401;
       errorMessages.push('Wrong email or password');

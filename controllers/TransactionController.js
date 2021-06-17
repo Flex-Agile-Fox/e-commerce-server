@@ -10,9 +10,10 @@ class TransactionController {
       quantity: req.body.quantity,
       total_price: req.body.total_price
     }
-    Transaction.findOne({ where: { ProductId: req.params.productId } })
+    Transaction.findOne({ where: { UserId:req.userId, ProductId: req.params.productId } })
       .then((transaction) => {
         if (transaction) {
+          if (transaction.quantity === req.body.stock) throw { name: 'STOCK_NOT_ENOUGH' };
           transaction.quantity += 1
           transaction.total_price += newTransaction.total_price
           return transaction.save()
@@ -26,6 +27,7 @@ class TransactionController {
 
   static display(req, res, next) {
     Transaction.findAll({
+      where: { UserId:req.userId },
       include: [Product]
     })
       .then(transactions => {
