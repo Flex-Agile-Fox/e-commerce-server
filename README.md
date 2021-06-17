@@ -11,7 +11,8 @@ npm run dev to run
 **Base URL**
 
 server: https://agile-ecommerce-cms.herokuapp.com<br/>
-client: https://agile-ecommerce-cms.web.app
+client: https://agile-ecommerce-cms.web.app<br/>
+client customer: https://agile-fox-ecommerce.web.app
 
 ---
 # Products
