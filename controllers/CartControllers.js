@@ -95,6 +95,7 @@ class CartController {
       });
   }
   static delItemCart(req, res, next) {
+    console.log(req);
     const { id } = req.params;
     const { userId } = req;
 

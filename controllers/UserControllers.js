@@ -1,15 +1,15 @@
-const { User } = require("../models");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { User } = require('../models');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
-const { OAuth2Client } = require("google-auth-library");
+const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 class UserController {
   static register(req, res, next) {
     const { name, email, password } = req.body;
 
-    User.create({ name, email, password, role: "customer" })
+    User.create({ name, email, password, role: 'customer' })
       .then((user) => {
         const access_token = jwt.sign(
           { id: user.id, role: user.role },
@@ -34,7 +34,7 @@ class UserController {
           );
           return res.status(200).json({ access_token, user });
         }
-        throw { name: "LOGIN_FAIL" };
+        throw { name: 'LOGIN_FAIL' };
       })
       .catch((err) => {
         next(err);
@@ -43,23 +43,27 @@ class UserController {
 
   static loginGoogle(req, res, next) {
     const { idToken } = req.body;
-    if (!idToken) return next("missing_access_token");
+    if (!idToken) return next('missing_access_token');
 
     let email;
     let statusCode = 200;
     client
       .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
       .then((ticket) => {
+        name = ticket.getPayload().given_name;
         email = ticket.getPayload().email;
         return User.findOne({ where: { email } });
       })
       .then((user) => {
+        const role = customer;
+
         if (user) return user;
         statusCode = 201;
         return User.create({
-          name, // belum dikonfirmasi dapet name gk
+          name,
           email,
           password: process.env.GOOGLE_DEFAULT_PASSWORD,
+          role,
         });
       })
       .then((user) => {

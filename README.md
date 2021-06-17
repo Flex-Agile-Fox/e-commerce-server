@@ -5,6 +5,7 @@ Available endpoint:
 - User
 - Product
 - Cart
+- Search
 
 ## Getting Started
 
@@ -851,6 +852,59 @@ Link admin client side Firebase: https://cms-admin-dashboard.web.app
     ```json
     {
       "message": ["cart not found"]
+    }
+    ```
+
+  - _Error Response_ **_Code 500_**
+
+    Occurs if there is any error code on server
+
+    ```json
+    {
+      "message": ["internal server error"]
+    }
+    ```
+
+=====================================================================================
+
+## Search Endpoint
+
+- ### Get all product searched by name | `GET /search`
+
+  - _Method_
+    ```
+    GET
+    ```
+  - _URL_
+    ```
+    /search
+    ```
+  - _URL Params_
+    ```
+    /search?name=query
+    ```
+  - _Data Params_
+
+    ```
+    none
+    ```
+
+  - _Success Response_ **_Code 200_**
+
+    ```json
+    {
+      "data": [
+        {
+          "id": 2,
+          "name": "Bata",
+          "image_url": "https://cf.shopee.co.id/file/8154fd3b4cb3bff2b67d8bf7503f503c",
+          "price": 120000,
+          "stock": 7,
+          "category": "Casual",
+          "createdAt": "2021-06-15T05:52:44.466Z",
+          "updatedAt": "2021-06-15T05:52:44.466Z"
+        }
+      ]
     }
     ```
 
