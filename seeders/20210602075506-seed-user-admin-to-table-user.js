@@ -11,6 +11,7 @@ dataAdmin.forEach(e => {
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Users', dataAdmin, {});
+    await queryInterface.sequelize.query(`SELECT setval('"Users_id_seq"', (SELECT MAX(id)FROM "Users"))`)
   },
 
   down: async (queryInterface, Sequelize) => {

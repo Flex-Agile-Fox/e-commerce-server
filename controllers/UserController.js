@@ -13,7 +13,7 @@ class UserController{
         .then((user) => {
             // call function send Email in helpers
             sendEmail(user.email)
-            res.status(201).json({success:true, message:"Anda berhasil register.."})    
+            res.status(201).json({success:true, message:"Anda berhasil register.."})
         }).catch((err) => {
             next(err)
         });
@@ -75,6 +75,7 @@ class UserController{
         })
         .then((user) => {
             console.log(user)
+            sendEmail(user.email)
             const access_token = jwt.sign({ id: user.id }, process.env.JWT_SECREAT);
             res.status(statusCode).json({id:user.id, name:user.name, access_token });
         })
