@@ -52,7 +52,7 @@ class CartController {
 			})
 			.then(() => {
 				res
-					.status(200)
+					.status(201)
 					.json({ success: true, message: "Added Successfully to carts" });
 			})
 			.catch((err) => {
