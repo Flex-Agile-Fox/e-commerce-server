@@ -2,13 +2,19 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { OAuth2Client } = require('google-auth-library');
+const axios = require('axios')
 
 class UserController {
 
   static register(req, res, next) {
     const { email, password } = req.body;
+    // axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.ABSTRACT_API}&email=${email}`)
+    //   .then(response => {
+    //     if (response.data.deliverability === "DELIVERABLE") return User.create({ email, password })
+    //     else throw { name: 'INVALID_EMAIL' };
+    //   })
     User.create({ email, password })
-      .then(() => {
+      .then(_ => {
         res.status(201).json({ message: 'User registered successfully' });
       })
       .catch((err) => next(err));

@@ -28,7 +28,10 @@ class TransactionController {
   static display(req, res, next) {
     Transaction.findAll({
       where: { UserId:req.userId },
-      include: [Product]
+      include: [{
+        model: Product
+      }],
+      order: [[Product, 'name', 'asc']]
     })
       .then(transactions => {
         res.status(200).json({ data: transactions })

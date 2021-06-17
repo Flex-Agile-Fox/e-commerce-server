@@ -24,7 +24,7 @@ const customer = {
   updatedAt: new Date()
 };
 
-const product = {
+const product1 = {
   id: 1,
   name: 'kaos', 
   image_url: 'http://kaosimg.com',
@@ -36,29 +36,37 @@ const product = {
   updatedAt: new Date()
 };
 
+const product2 = {
+  id: 2,
+  name: 'sepatu', 
+  image_url: 'http://sepatuimg.com',
+  category: 'sepatu',
+  price: 2000000,
+  stock: 10,
+  UserId: admin.id,
+  createdAt: new Date(),
+  updatedAt: new Date()
+};
+
 const transaction = {
-  productId: 1,
   status: 'cart',
   quantity: 2,
   total_price: 4000
 };
 
 const transactionNull = {
-  productId: null,
   status: '',
   quantity: null,
   total_price: null
 };
 
 const transactionMin = {
-  productId: 1,
   status: 'cart',
   quantity: -1,
   total_price: -2
 };
 
 const transactionFalse = {
-  productId: 1,
   status: 'cart',
   quantity: false,
   total_price: false
@@ -81,7 +89,7 @@ beforeAll((done) => {
       return queryInterface.bulkInsert('Users', users);
     })
     .then(() => {
-      const products = [product];
+      const products = [product1, product2];
       return queryInterface.bulkInsert('Products', products);
     })
     .then(() => {
@@ -118,11 +126,11 @@ afterAll((done) => {
 });
 
 // CREATE
-describe('POST /transactions', () => {
+describe('POST /transactions/:productId', () => {
 
   it('Success add transaction, return transaction data)', (done) => {
     request(app)
-      .post('/transactions')
+      .post('/transactions/2')
       .set('Content-Type', 'application/json')
       .set("access_token", tokenCustomer)
       .send(transaction)
@@ -142,7 +150,7 @@ describe('POST /transactions', () => {
 
   it('Fail add transaction if not provide access token, return error message', (done) => {
     request(app)
-      .post('/transactions')
+      .post('/transactions/3')
       .set('Content-Type', 'application/json')
       .send(transaction)
       .then(({ body, status }) => {
@@ -156,14 +164,13 @@ describe('POST /transactions', () => {
 
   it('Fail add transaction if required field empty or null, return error message', (done) => {
     request(app)
-      .post('/transactions')
+      .post('/transactions/3')
       .set('Content-Type', 'application/json')
       .set("access_token", tokenCustomer)
       .send(transactionNull)
       .then(({ body, status }) => {
         expect(status).toBe(400);
         expect(body).toHaveProperty('errorMessages', expect.any(Array));
-        expect(body.errorMessages).toContain('Product Id must not be null');
         expect(body.errorMessages).toContain('Status must not be empty');
         expect(body.errorMessages).toContain('Quantity must not be null');
         expect(body.errorMessages).toContain('Total price must not be null');
@@ -174,7 +181,7 @@ describe('POST /transactions', () => {
 
   it('Fail add transaction if fill negative quantity or total price number, return error message', (done) => {
     request(app)
-      .post('/transactions')
+      .post('/transactions/3')
       .set('Content-Type', 'application/json')
       .set("access_token", tokenCustomer)
       .send(transactionMin)
@@ -190,7 +197,7 @@ describe('POST /transactions', () => {
 
   it('Fail add transaction if fill wrong data type, return error message', (done) => {
     request(app)
-      .post('/transactions')
+      .post('/transactions/3')
       .set('Content-Type', 'application/json')
       .set("access_token", tokenCustomer)
       .send(transactionFalse)
@@ -313,6 +320,75 @@ describe('PUT /transactions/:id', () => {
 
 });
 
+// UPDATE (PATCH)
+describe('PATCH /transactions/:id', () => {
+  it('Success update transaction, return transaction data)', (done) => {
+    request(app)
+      .patch(`/transactions/${newTransaction.id}`)
+      .set('Content-Type', 'application/json')
+      .set("access_token", tokenCustomer)
+      .send(transaction)
+      .then(({ body, status }) => {
+        expect(status).toBe(200);
+        expect(body).toHaveProperty('data', expect.any(Object));
+        expect(body.data).toHaveProperty('id', expect.any(Number));
+        expect(body.data).toHaveProperty('UserId', expect.any(Number));
+        expect(body.data).toHaveProperty('ProductId', expect.any(Number));
+        expect(body.data).toHaveProperty('status', expect.any(String));
+        expect(body.data).toHaveProperty('quantity', expect.any(Number));
+        expect(body.data).toHaveProperty('total_price', expect.any(Number));
+
+        done();
+      });
+  })
+
+  it('Fail update transaction if not provide access token, return error message', (done) => {
+    request(app)
+      .patch(`/transactions/${newTransaction.id}`)
+      .set('Content-Type', 'application/json')
+      .send(transaction)
+      .then(({ body, status }) => {
+        expect(status).toBe(401);
+        expect(body).toHaveProperty('errorMessages', expect.any(Array));
+        expect(body.errorMessages).toContain('Missing access token');
+
+        done();
+      });
+  });
+
+  it('Fail update transaction if fill negative quantity or total price number, return error message)', (done) => {
+    request(app)
+      .patch(`/transactions/${newTransaction.id}`)
+      .set('Content-Type', 'application/json')
+      .set("access_token", tokenCustomer)
+      .send(transactionMin)
+      .then(({ body, status }) => {
+        expect(status).toBe(400);
+        expect(body).toHaveProperty('errorMessages', expect.any(Array));
+        expect(body.errorMessages).toContain('Quantity cannot be negative');
+        expect(body.errorMessages).toContain('Total price cannot be negative');
+
+        done();
+      });
+  })
+
+  it('Fail update transaction if fill wrong data type, return error message)', (done) => {
+    request(app)
+      .patch(`/transactions/${newTransaction.id}`)
+      .set('Content-Type', 'application/json')
+      .set("access_token", tokenCustomer)
+      .send(transactionFalse)
+      .then(({ body, status }) => {
+        expect(status).toBe(400);
+        expect(body).toHaveProperty('errorMessages', expect.any(Array));
+        expect(body.errorMessages).toContain('Quantity must be integer');
+        expect(body.errorMessages).toContain('Total price must be integer');
+
+        done();
+      });
+  })
+
+});
 
 // DELETE
 describe('DELETE /transactions/:id', () => {

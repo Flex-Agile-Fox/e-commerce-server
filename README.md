@@ -430,7 +430,7 @@ Returns deleted product
 
 ***End Points***
 
-POST /transactions<br/>
+POST /transactions/:productId<br/>
 GET /transactions<br/>
 GET /transactions/:id<br/>
 PUT /transactions/:id<br/>
@@ -442,7 +442,7 @@ Returns new transaction
 
 * **URL**
 
-    /transactions
+    /transactions/:productId
 
 * **Method:**
 
@@ -457,7 +457,7 @@ Returns new transaction
     **Required:**
     ````
     {
-      ProductId: req.body.productId,
+      ProductId: req.params.productId,
       status: req.body.status,
       quantity: req.body.quantity,
       total_price: req.body.total_price
@@ -512,7 +512,7 @@ Returns new transaction
     ```javascript
       axios({
         method: 'POST',
-        url: `https://agile-ecommerce-cms.herokuapp.com/transactions`,
+        url: `https://agile-ecommerce-cms.herokuapp.com/transactions/:productId`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -759,6 +759,94 @@ Returns updated transaction
         },
         data: {
           ProductId, status, quantity, total_price
+        }
+      })
+    ```
+
+
+***Update (Patch)***
+
+Returns updated transaction
+
+* **URL**
+
+    /transactions/:id
+
+* **Method:**
+
+    `PATCH`
+
+* **URL Params**
+
+    **Required:**
+    `id`
+
+* **Data Params**
+
+    **Required:**
+    ````
+    {
+      quantity: req.body.quantity,
+      total_price: req.body.total_price
+    }
+    ````
+
+* **Success Response:**
+
+    * **Code:** 200 <br/>
+      **Content:**
+    ```  
+    {
+      "id": "<transaction id>",
+      "UserId": "<user id>",
+      "ProductId": "<product id>",
+      "status": "<transaction status>",
+      "quantity": "<transaction quantity>",
+      "total_price": "<transaction total price>",
+      "updatedAt": "<updated date>",
+      "createdAt": "<created date>"
+    }
+    
+    ```
+* **Error Response:**
+
+    * **Code:** 400 <br/>
+      **Content:**
+      ```
+      { error : "SequelizeValidationError" }
+      ```
+    OR
+    * **Code:** 401 <br/>
+      **Content:**
+      ```
+      message : [
+        "Missing access token",
+        "Invalid access token"
+      ]
+      ```
+    OR
+    * **Code:** 404 <br/>
+    **Content:**
+      ```
+      message: [
+        "User not found",
+        "Transaction not found"
+      ]
+      ```
+    OR
+    * **Code:** 500
+
+
+* **Sample Call:**
+    ```javascript
+      axios({
+        method: 'PATCH',
+        url: 'https://agile-ecommerce-cms.herokuapp.com/transactions/:id',
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        data: {
+          quantity, total_price
         }
       })
     ```

@@ -39,6 +39,10 @@ const errorHandler = (err, req, res, next) => {
       errorCode = 401;
       errorMessages.push('Wrong email or password');
       break;
+    case 'INVALID_EMAIL':
+      errorCode = 401;
+      errorMessages.push('Email account might be wrong or invalid');
+      break;
     case 'SequelizeValidationError':
       errorCode = 400;
       errorMessages = err.errors ? err.errors.map((el) => el.message) : [];
