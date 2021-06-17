@@ -28,10 +28,13 @@ http://localhost:3000
 
 **Deployment URL**
 
-frontend: https://e-commerce-1255f.web.app
+frontend (client): https://ecommerce-client-customer.web.app
+frontend (admin): https://e-commerce-1255f.web.app
 backend: https://e-commerce-rendy.herokuapp.com
 
 # e-commerce-server
+
+# User
 
 ## **_Register_**
 
@@ -184,6 +187,8 @@ Returns access token.
   ```
 
 ---
+
+# Product
 
 ## **_Add_**
 
@@ -635,6 +640,353 @@ Returns status.
   axios({
   	method: "DELETE",
   	url: `http://localhost:3000/products/1`,
+  	headers: {
+  		access_token: localStorage.getItem("access_token"),
+  	},
+  });
+  ```
+
+---
+
+# Cart
+
+## **_Add_**
+
+Returns message.
+
+- **URL**
+
+  /carts
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**
+
+  None
+
+- **Data Params**
+
+  **Required:**
+
+  ```
+    {
+      quantity: req.quantity,
+      ProductId: req.body.product_id,
+    }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+
+    ```
+    {
+      "sucess": true,
+      "message": "Added Successfully to carts"
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 <br />
+    **Content:**
+    ```
+    { errors : "SequelizeValidationError" }
+    ```
+
+  OR
+
+  - **Code:** 500 <br />
+    **Content:**
+    ```
+    { errors : "Internal Server Error" }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios({
+  	method: "POST",
+  	url: `http://localhost:3000/carts`,
+  	headers: {
+  		"Content-Type": "application/json",
+  		access_token: localStorage.getItem("access_token"),
+  	},
+  	data: {
+  		quantity,
+  		product_id,
+  	},
+  });
+  ```
+
+---
+
+## **_Display All_**
+
+Returns all carts.
+
+- **URL**
+
+  /carts
+
+- **Method:**
+
+  `GET`
+
+- **URL Params**
+
+None
+
+- **Data Params**
+
+  None
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```
+    {
+      "success": true
+      "carts": [
+        {
+          "id": 1,
+          "UserId": "<cart UserId>",
+          "ProductId": "<cart ProductId>",
+          "Product": "<cart Product>",
+          "updatedAt": "2021-04-15T00:22:11.114Z",
+          "createdAt": "2021-04-15T00:22:11.114Z",
+        },
+        {
+          "id": 2,
+          "UserId": "<cart UserId>",
+          "ProductId": "<cart ProductId>",
+          "Product": "<cart Product>",
+          "updatedAt": "2021-04-15T00:22:11.114Z",
+          "createdAt": "2021-04-15T00:22:11.114Z",
+        }
+      ]
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 500 <br />
+    **Content:**
+    ```
+    { errors : "Internal Server Error" }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios({
+  	method: "GET",
+  	url: "http://localhost:3000/carts",
+  	headers: {
+  		access_token: localStorage.getItem("access_token"),
+  	},
+  });
+  ```
+
+---
+
+## **_Edit_**
+
+Returns success message
+
+- **URL**
+
+  /carts/:id
+
+- **Method:**
+
+  `PUT`
+
+- **URL Params**
+
+  id
+
+- **Data Params**
+
+  **Required:**
+
+  ```
+    {
+      quantity: req.body.quantity,
+    }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+      "success": true,
+      "message": "Carts Eddited Successfully"
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 <br />
+    **Content:**
+
+    ```
+    { error : "SequelizeValidationError" }
+    ```
+
+    OR
+
+  - **Code:** 404 <br />
+    **Content:**
+
+    ```
+    {
+      "errors": [
+          "Carts Not Found"
+      ]
+    }
+    ```
+
+    OR
+
+  - **Code:** 400 <br />
+    **Content:**
+
+    ```
+    {
+        "errors": [
+            "Missing Access Token"
+        ]
+    }
+    ```
+
+    OR
+
+  - **Code:** 400 <br />
+    **Content:**
+
+    ```
+    {
+        "errors": [
+            "Invalid Token"
+        ]
+    }
+    ```
+
+    OR
+
+  - **Code:** 500 <br />
+    **Content:**
+    ```
+    { errors : "Internal Server Error" }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios({
+  	method: "PUT",
+  	url: `http://localhost:3000/carts/1`,
+  	headers: {
+  		access_token: localStorage.getItem("access_token"),
+  	},
+  	data: {
+  		quantity,
+  	},
+  });
+  ```
+
+---
+
+## **_Delete_**
+
+Returns message
+
+- **URL**
+
+  /carts/:id
+
+- **Method:**
+
+  `DELETE`
+
+- **URL Params**
+
+  id
+
+- **Data Params**
+
+  None
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+      "success": true
+      "message": "Cart Successfully Deleted"
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 404 <br />
+    **Content:**
+
+    ```
+    {
+      "errors": [
+          "Carts Not Found"
+      ]
+    }
+    ```
+
+    OR
+
+  - **Code:** 400 <br />
+    **Content:**
+
+    ```
+    {
+        "errors": [
+            "Missing Access Token"
+        ]
+    }
+    ```
+
+    OR
+
+  - **Code:** 400 <br />
+    **Content:**
+
+    ```
+    {
+        "errors": [
+            "Invalid Token"
+        ]
+    }
+    ```
+
+    OR
+
+  - **Code:** 500 <br />
+    **Content:**
+    ```
+    { errors : "Internal Server Error" }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios({
+  	method: "DELETE",
+  	url: `http://localhost:3000/carts/1`,
   	headers: {
   		access_token: localStorage.getItem("access_token"),
   	},
