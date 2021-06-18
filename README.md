@@ -45,7 +45,7 @@ Link server side Heroku: https://cms-admin-dashboard.herokuapp.com
 
 Link admin client side Firebase: https://cms-admin-dashboard.web.app
 
-=====================================================================================
+# Link customer client: https://agileshoee-24e66.web.app
 
 ## User Endpoint
 
