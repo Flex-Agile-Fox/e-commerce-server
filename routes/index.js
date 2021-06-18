@@ -7,9 +7,6 @@ const { authentication } = require('../middlewares/auth');
 //for search endpoint
 const { Product, sequelize } = require('../models');
 
-router.use('/users', userRouter);
-router.use('/products', productRouter);
-
 //search endpoint start
 router.get('/search', (req, res, next) => {
   let { name } = req.query;
@@ -33,6 +30,8 @@ router.get('/search', (req, res, next) => {
 });
 // search endpoint end
 
+router.use('/users', userRouter);
+router.use('/products', productRouter);
 router.use(authentication);
 router.use('/carts', cartRouter);
 
