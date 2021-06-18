@@ -3,7 +3,7 @@
 ## Production
 * Server : https://e-commerce-cms-server-hacktiv8.herokuapp.com
 * Client CMS : https://e-commerce-client-hacktiv8.web.app
-* Client Customer : https://e-commerce-client-hacktiv8.web.app
+* Client Customer : https://customer-electronics-village.web.app
 
 ## Login Admin
 * email: admin@mail.com

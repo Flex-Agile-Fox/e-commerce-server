@@ -13,5 +13,11 @@ app.use(express.urlencoded({extended:true}))
 app.use(routes)
 app.use(errorHandler)
 
+// Untuk Jest
 if (process.env.NODE_ENV === 'test') module.exports = app;
 else app.listen(port, ()=>{ console.log(`your server run at http://localhost:${port}`)}) 
+
+// for deploy
+// app.listen(port, ()=>{
+//     console.log(`your server run at http://localhost:${port}`)
+// })
